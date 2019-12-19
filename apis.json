@@ -1,0 +1,92 @@
+{
+    "name": "ShareThis",
+    "description": "Customize, download and install our easy-to-use share buttons and other publishing tools for your website or blog. Grow your audience. Win the internet!",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/476-sharethis.jpg",
+    "tags": [
+        "copy",
+        "have api",
+        "javascript",
+        "links",
+        "social",
+        "social sharing"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/sharethis\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "ShareThis",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/476-sharethis.jpg",
+            "humanURL": "http:\/\/sharethis.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/sharethis-openapi.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Base",
+            "url": "http:\/\/rest.sharethis.com"
+        },
+        {
+            "type": "Blog",
+            "url": "http:\/\/blog.sharethis.com"
+        },
+        {
+            "type": "Blog RSS",
+            "url": "http:\/\/www.sharethis.com\/feed\/"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "https:\/\/crunchbase.com\/organization\/sharethis"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "http:\/\/www.crunchbase.com\/company\/sharethis"
+        },
+        {
+            "type": "Developers",
+            "url": "http:\/\/developer.sharethis.com\/"
+        },
+        {
+            "type": "Email",
+            "url": "info@sharethis.com"
+        },
+        {
+            "type": "Email",
+            "url": "support@sharethis.com"
+        },
+        {
+            "type": "Email",
+            "url": "pr@sharethis.com"
+        },
+        {
+            "type": "Email",
+            "url": "privacy@sharethis.com"
+        },
+        {
+            "type": "Email",
+            "url": "contentremoval@sharethis.com"
+        },
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/sharethis"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/#!\/sharethis"
+        },
+        {
+            "type": "Website",
+            "url": "http:\/\/sharethis.com"
+        }
+    ]
+}
