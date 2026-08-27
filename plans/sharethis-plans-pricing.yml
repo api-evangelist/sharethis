@@ -1,0 +1,48 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://sharethis.com/platform/ and https://sharethis.com/pricing/ (HTTP 404, probed 2026-08-27)
+plan_count: 1
+currency: USD
+note: >-
+  ShareThis publishes no pricing table and no tiering for its website tools — /pricing/ returns HTTP
+  404 and no plan comparison exists anywhere on the site. What it publishes instead is an unqualified
+  free offer: the platform page repeatedly describes the website tools as "free tools" and states
+  "Our tools are easy to install and always free to use. No risk, all reward." The homepage's own
+  schema.org SoftwareApplication markup encodes the same claim as a machine-readable
+  Offer{price 0.00, priceCurrency USD, category free}. Recorded as one free plan rather than
+  plan_count 0, because the provider does make an explicit, quotable price statement.
+plans:
+- name: Free
+  price: 0.00
+  currency: USD
+  billing_period: none
+  quota: not published
+  overage: not published
+  limits:
+  - >-
+    Property count is capped — POST /properties/ returns 403 "Property limit exceeded" — but the
+    numeric ceiling is not published anywhere.
+  - >-
+    OAuth client count is capped — POST /oauth-clients returns 403 OAUTH_CLIENT_LIMIT_EXCEEDED —
+    numeric ceiling not published.
+  - Four app configurations per property (the app_id enum).
+  includes:
+  - Share, follow and reaction buttons
+  - ShareThis Platform API access
+  - ShareThis MCP server access
+  - Social Share Count API (no account required)
+  source: https://sharethis.com/platform/
+  evidence_quote: 'Our tools are easy to install and always free to use. No risk, all reward.'
+  caveat: >-
+    "Always free" is a marketing statement, not a published rate card or SLA-backed commitment. The
+    two quota errors above prove limits exist and are enforced; their values are not disclosed, so a
+    consumer cannot capacity-plan from public information.
+enterprise_track:
+  present: true
+  note: >-
+    The revenue business is the audience-data side (https://sharethis.com/data/ — audiences,
+    targeting, analytics, data feeds, B2B, CPG), delivered through partner platforms such as
+    LiveRamp and The Trade Desk and via the sibling Predactiv Data Platform. That side publishes no
+    pricing at all and is contact-sales only. The free website tools are the data-collection surface
+    that feeds it.

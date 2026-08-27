@@ -1,0 +1,29 @@
+generated: '2026-08-27'
+method: probed
+source: https://mcp.sharethis.com/.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource (2026-08-27)
+note: >-
+  The OpenAPI document declares no oauth2 securityScheme, so derive-oauth-scopes.py correctly found
+  nothing to derive from the spec. The scope surface here belongs to the MCP server instead, and was
+  read directly from its live RFC 8414 / RFC 9728 discovery documents rather than from the contract.
+surface: ShareThis MCP Server
+resource: https://mcp.sharethis.com
+authorization_servers:
+- https://mcp.sharethis.com
+scopes:
+- name: mcp:tools
+  description: >-
+    Authorizes invocation of the ShareThis MCP tool set — property create/list/get/validate and app
+    upsert/list/get/delete/liveview.
+  source: scopes_supported in the authorization-server and protected-resource metadata
+granularity:
+  level: coarse
+  assessment: >-
+    A single scope covers all nine tools, including the one destructive operation
+    (sharethis_apps_delete). There is no read-only scope, so an agent granted access to list
+    properties is necessarily also granted the ability to delete an app configuration. Least
+    privilege is not expressible against this authorization server today.
+rest_api_scopes:
+  present: false
+  note: >-
+    The Platform API's bearer JWT carries no scopes — authorization is all-or-nothing on the
+    account.

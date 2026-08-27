@@ -1,0 +1,138 @@
+generated: '2026-08-27'
+method: derived
+source: openapi/sharethis-platform-api.json (4xx/5xx responses + components.schemas.Response)
+format: code-envelope
+rfc9457: false
+envelope:
+  media_type: application/json
+  schema: components.schemas.Response
+  shape:
+    code: string — machine-readable outcome code, REQUIRED (example PROPERTY_CREATED)
+    data: object, nullable
+  note: >-
+    ShareThis uses ONE response envelope for both success and failure, discriminated by the `code`
+    string rather than by a distinct error schema. It is not RFC 9457 problem+json: there is no
+    type/title/detail/instance and no application/problem+json media type. An agent must branch on
+    HTTP status plus the `code` value; there is no machine-readable pointer to documentation for a
+    given failure. The spec also declares the 4xx/5xx responses with prose descriptions and, for
+    several of them, no content schema at all — so the error BODY for those is undescribed.
+gaps:
+  undescribed_error_bodies: >-
+    Several 4xx/5xx responses in the spec declare no content schema, so their payload shape is not
+    machine-readable from the contract.
+  no_documented_error_reference: >-
+    No public error-code reference page was found on sharethis.com; the codes below are the ones the
+    OpenAPI itself names.
+problem_types:
+- code: NAME_REQUIRED
+  status: 400
+  title: Required name field missing
+  operations:
+  - 'POST /oauth-clients'
+  remediation: Supply the OAuth client name in the request body.
+  source: named explicitly in the OpenAPI 400 response description
+- code: INVALID_PARAMS
+  status: 400
+  title: Invalid request parameters
+  operations:
+  - 'POST /generate-ai-summary'
+  remediation: Correct the request parameters before retrying; retrying unchanged will fail again.
+  source: named explicitly in the OpenAPI 400 response description
+- code: OAUTH_CLIENT_LIMIT_EXCEEDED
+  status: 403
+  title: OAuth client quota exhausted
+  operations:
+  - 'POST /oauth-clients'
+  remediation: >-
+    Delete an existing OAuth client via DELETE /oauth-clients/{client_id} before creating another.
+    The numeric limit is not published.
+  source: named explicitly in the OpenAPI 403 response description
+- code: OAUTH_CLIENT_NOT_FOUND
+  status: 404
+  title: OAuth client does not exist
+  operations:
+  - 'DELETE /oauth-clients/{client_id}'
+  remediation: Verify the client_id against GET /oauth-clients.
+  source: named explicitly in the OpenAPI 404 response description
+- code: PROPERTY_NOT_FOUND
+  status: 404
+  title: Property does not exist
+  operations:
+  - 'POST /audience-pageviews'
+  remediation: Verify the property_id against GET /properties.
+  source: named explicitly in the OpenAPI 404 response description
+- code: AI_SUMMARY_FAILED
+  status: 502
+  title: AI summary generation failed
+  operations:
+  - 'POST /generate-ai-summary'
+  retryable: false
+  remediation: >-
+    Model returned unusable output, or a non-retryable upstream error. Per the spec description this
+    is NOT safe to retry unchanged.
+  source: named explicitly in the OpenAPI 502 response description
+- code: AI_SUMMARY_UNAVAILABLE
+  status: 503
+  title: AI summary temporarily unavailable
+  operations:
+  - 'POST /generate-ai-summary'
+  retryable: true
+  remediation: >-
+    Key not configured, or a transient upstream fault (429/5xx/network/timeout). The spec states
+    this one IS safe to retry.
+  source: named explicitly in the OpenAPI 503 response description
+- code: AUDIENCE_PAGEVIEWS_FAILED
+  status: 502
+  title: Audience pageview retrieval failed
+  operations:
+  - 'POST /audience-pageviews'
+  remediation: Upstream audience data fetch failed; retry with backoff.
+  source: named explicitly in the OpenAPI 502 response description
+unnamed_conditions:
+- status: 400
+  description: Invalid input
+  operations:
+  - 'POST /properties/'
+  - 'POST /properties/{property_id}/apps'
+- status: 400
+  description: Validation failed due to missing or invalid file
+  operations:
+  - 'POST /properties/{property_id}/validate'
+  note: The domain-ownership verification file was missing or did not match.
+- status: 400
+  description: Missing required credentials
+  operations:
+  - 'POST /auth/login'
+- status: 401
+  description: Authentication required (Invalid credentials on /auth/login)
+  operations:
+  - every operation except POST /auth/login
+- status: 403
+  description: Property limit exceeded
+  operations:
+  - 'POST /properties/'
+- status: 404
+  description: Property not found / Property or app not found
+  operations:
+  - 'GET /properties/{property_id}'
+  - 'POST /properties/{property_id}/validate'
+  - 'POST /properties/{property_id}/apps'
+  - listPropertyApps
+  - getPropertyApp
+  - deletePropertyApp
+- status: 409
+  description: Property already verified
+  operations:
+  - 'POST /properties/{property_id}/validate'
+  note: >-
+    The one conflict condition in the contract — re-validating an already-verified property is
+    rejected rather than treated as a no-op.
+- status: 500
+  description: Internal server error
+  operations:
+  - most operations
+retry_guidance:
+  note: >-
+    The AI summary operation is the only place ShareThis states retry semantics, and it states them
+    well — separating a non-retryable 502 from an explicitly retryable 503. No Retry-After header is
+    documented anywhere in the contract.

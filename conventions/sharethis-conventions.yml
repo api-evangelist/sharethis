@@ -1,0 +1,148 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  openapi/sharethis-platform-api.json, mcp/sharethis-mcp-tools.json, live probes of
+  platform-api.sharethis.com and count-server.sharethis.com, and https://sharethis.com/platform-api/
+summary: >-
+  A deliberately small management API with thin runtime semantics. Auth and versioning are clear;
+  idempotency, pagination, request tracing and rate-limit signaling are entirely absent from both
+  the contract and the docs. For an agent this means writes cannot be safely retried and failures
+  cannot be correlated with support.
+authentication:
+  style: bearer token
+  scheme: BearerToken (http/bearer, bearerFormat JWT)
+  obtain_via: 'POST /auth/login (the only unauthenticated operation in the contract)'
+  applied: All 13 other operations declare security; /auth/login does not.
+  mcp_differs: >-
+    The MCP surface does NOT use this bearer token. It uses OAuth 2.1 authorization-code with PKCE
+    (S256) and the mcp:tools scope. Two different auth models for one product.
+  detail: authentication/sharethis-authentication.yml
+versioning:
+  style: URI path
+  current: v2.0
+  base_url: https://platform-api.sharethis.com/v2.0
+  spec_version: 2.0.0
+  note: >-
+    The share-count API is independently versioned on the same v2.0 path segment
+    (count-server.sharethis.com/v2.0/get_counts) but is a separate service. No version header, no
+    date-based versioning, no version negotiation.
+idempotency:
+  supported: false
+  header: null
+  evidence: >-
+    Zero occurrences of "idempoten" in the OpenAPI document and no mention on the platform-api docs
+    page. No Idempotency-Key header is declared on any operation.
+  impact: >-
+    POST /properties/ and POST /oauth-clients are unguarded creates. An agent that retries after a
+    timeout can silently create a duplicate property or a second OAuth client, and the only
+    published limit signals (403 Property limit exceeded, 403 OAUTH_CLIENT_LIMIT_EXCEEDED) surface
+    only once the quota is already consumed.
+  mitigating_factor: >-
+    POST /properties/{property_id}/apps is a create-or-update upsert keyed on (property_id, app_id),
+    so it is naturally idempotent in effect even though no idempotency mechanism is declared. The
+    validate operation returns 409 on an already-verified property rather than repeating work.
+pagination:
+  supported: false
+  evidence: >-
+    No page/offset/cursor/limit parameters on any collection operation. GET /properties,
+    GET /oauth-clients and listPropertyApps all return unbounded arrays.
+  impact: >-
+    An account with many properties has no way to page; the caller receives the whole collection or
+    nothing. Acceptable at the cardinality this API implies (one property per website domain, four
+    apps per property) but undeclared, so a client cannot know the ceiling.
+filtering_and_expansion:
+  supported: false
+  note: No sparse fieldsets, no expansion parameters, no query filters anywhere in the contract.
+metadata:
+  supported: false
+  note: No customer-supplied metadata field on any resource.
+request_tracing:
+  request_id: false
+  evidence: >-
+    No X-Request-Id, request-id or correlation header declared in the spec, and none observed on
+    live responses from platform-api.sharethis.com or count-server.sharethis.com.
+  impact: An agent has no identifier to quote when escalating a failed call to ShareThis support.
+rate_limit_signaling:
+  headers: none
+  evidence: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header is declared in the contract, and none was
+    returned on a live unauthenticated call to the share-count API. Responses carry only CloudFront
+    edge headers.
+  status_on_exhaustion: not documented
+  detail: rate-limits/sharethis-rate-limits.yml
+error_envelope:
+  shape: '{code: string, data: object|null}'
+  rfc9457: false
+  discriminator: the `code` string, used for BOTH success and failure outcomes
+  detail: errors/sharethis-problem-types.yml
+response_format:
+  media_type: application/json
+  envelope: uniform Response wrapper on the Platform API
+  note: >-
+    The Social Share Count API does NOT use the envelope — it returns a bare, unwrapped JSON object
+    of count maps. The two ShareThis APIs disagree on response shape.
+dry_run_mode:
+  supported: false
+  note: >-
+    No preview/simulate/validate-only parameter on any write operation. The one adjacent capability
+    is sharethis_apps_liveview (MCP) / the live app view, which renders an app's ALREADY-SAVED
+    configuration — it is an after-the-fact inspection, not a rehearsal of an unsaved change.
+reversibility:
+  grade: none
+  applicable: true
+  summary: >-
+    ShareThis publishes no reversal operation and no window for any write on this API. The contract
+    contains four write surfaces and not one of them documents an undo, restore, cancel or
+    soft-delete path.
+  write_surfaces:
+  - operation: 'POST /properties/'
+    action: Create a property
+    reversal_operation: null
+    window: null
+    note: >-
+      There is NO delete-property operation anywhere in the contract. A property created in error
+      cannot be removed through the API at all — the graph is create-only at the property level,
+      and property creation is quota-limited (403 Property limit exceeded), so an erroneous create
+      permanently consumes quota.
+  - operation: 'POST /properties/{property_id}/validate'
+    action: Verify domain ownership
+    reversal_operation: null
+    window: null
+    note: >-
+      No un-verify operation. Re-calling validate on a verified property returns 409, so the state
+      transition is one-way.
+  - operation: 'POST /properties/{property_id}/apps'
+    action: Create or update an app configuration
+    reversal_operation: null
+    window: null
+    note: >-
+      Upsert overwrites the previous configuration with no version history and no restore endpoint.
+      The prior config is not recoverable through the API.
+  - operation: 'deletePropertyApp (DELETE /properties/{property_id}/apps/{app_id})'
+    action: Remove an app from a property
+    reversal_operation: null
+    window: null
+    re_create_path: 'POST /properties/{property_id}/apps'
+    note: >-
+      An app can be RE-CREATED by upserting the same app_id, but this is a fresh create, not a
+      documented reversal: the deleted app's previous configuration is gone and must be supplied
+      again by the caller. ShareThis does not describe this as an undo and states no window, so it
+      is recorded as a re-create path rather than credited as a reversal. This is also the only
+      operation the MCP server annotates destructiveHint:true.
+  - operation: 'DELETE /oauth-clients/{client_id}'
+    action: Delete an OAuth client
+    reversal_operation: null
+    window: null
+    note: >-
+      Irreversible — a deleted client's credentials cannot be restored; a new client must be created
+      and every consumer re-credentialed.
+  evidence: >-
+    Derived from the complete operation list in openapi/sharethis-platform-api.json (14 operations,
+    no cancel/refund/void/reverse/undo/rollback/restore verb among them) and from
+    https://sharethis.com/platform-api/, which documents no retention or recovery window.
+cross_references:
+  errors: errors/sharethis-problem-types.yml
+  lifecycle: lifecycle/sharethis-lifecycle.yml
+  authentication: authentication/sharethis-authentication.yml
+  rate_limits: rate-limits/sharethis-rate-limits.yml
+  data_model: data-model/sharethis-data-model.yml

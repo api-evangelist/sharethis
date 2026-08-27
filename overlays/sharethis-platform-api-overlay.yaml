@@ -1,0 +1,109 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the ShareThis Platform API
+  version: 1.0.0
+extends: ../openapi/sharethis-platform-api.json
+x-generated: '2026-08-27'
+x-method: generated
+x-source: >-
+  Derived from openapi/sharethis-platform-api.json plus live probes. Captures API Evangelist's
+  enhancements WITHOUT mutating the provider's original document. The single largest gap this
+  overlay closes is operationIds: 11 of 14 operations ship without one, so no generated client,
+  no crosswalk and no agent skill can name them stably. The operationIds below are OUR additions
+  and are not published by ShareThis.
+actions:
+- target: $.info
+  description: Record provenance and the contact/licensing metadata the original omits.
+  update:
+    x-api-evangelist-profile: https://apis.io/provider/sharethis/
+    x-spec-source: https://platform-api.sharethis.com/v2.0/openapi.json
+    x-spec-retrieved: '2026-08-27'
+    x-missing-metadata:
+    - info.contact
+    - info.termsOfService
+    - info.license
+- target: $.paths['/properties/'].post
+  description: Add a stable operationId (absent in the original).
+  update:
+    operationId: createProperty
+    x-idempotency: >-
+      Unguarded create. No Idempotency-Key is supported; a retry after timeout may create a duplicate
+      property and consume quota that cannot be released, because no delete-property operation exists.
+    x-reversibility: none
+- target: $.paths['/properties'].get
+  description: Add a stable operationId (absent in the original).
+  update:
+    operationId: listProperties
+    x-pagination: none — returns the full collection unbounded.
+- target: $.paths['/properties/{property_id}'].get
+  description: Add a stable operationId (absent in the original).
+  update:
+    operationId: getProperty
+    x-identifier-note: >-
+      The response field is named _id while the path parameter is property_id; they carry the same
+      value.
+- target: $.paths['/properties/{property_id}/validate'].post
+  description: Add a stable operationId (absent in the original).
+  update:
+    operationId: validateProperty
+    x-reversibility: none — verification is a one-way transition; re-calling returns 409.
+- target: $.paths['/properties/{property_id}/apps'].post
+  description: Add a stable operationId (absent in the original).
+  update:
+    operationId: upsertPropertyApp
+    x-idempotency: >-
+      Effectively idempotent — keyed on (property_id, app_id) and defined as create-or-update — but
+      no idempotency mechanism is declared and the prior configuration is overwritten irrecoverably.
+- target: $.paths['/oauth-clients'].post
+  description: Add a stable operationId (absent in the original).
+  update:
+    operationId: createOAuthClient
+    x-quota: 403 OAUTH_CLIENT_LIMIT_EXCEEDED; numeric limit not published.
+- target: $.paths['/oauth-clients'].get
+  description: Add a stable operationId (absent in the original).
+  update:
+    operationId: listOAuthClients
+- target: $.paths['/oauth-clients/{client_id}'].delete
+  description: Add a stable operationId (absent in the original).
+  update:
+    operationId: deleteOAuthClient
+    x-reversibility: none — irreversible; consumers must be re-credentialed.
+- target: $.paths['/generate-ai-summary'].post
+  description: Add a stable operationId and make the published retry semantics machine-readable.
+  update:
+    operationId: generateAiSummary
+    x-retry:
+      '502': not-retryable — AI_SUMMARY_FAILED, model returned unusable output.
+      '503': retryable — AI_SUMMARY_UNAVAILABLE, transient upstream fault.
+    x-note: >-
+      The only operation in the contract with explicit retry guidance, and the only REST operation
+      with no MCP tool equivalent.
+- target: $.paths['/auth/login'].post
+  description: Add a stable operationId and flag the unauthenticated entry point.
+  update:
+    operationId: login
+    x-unauthenticated: true
+    x-note: The only operation without a security requirement; mints the bearer JWT for all others.
+- target: $.paths['/audience-pageviews'].post
+  description: Add a stable operationId (absent in the original).
+  update:
+    operationId: getAudiencePageviews
+    x-note: REST-only — no MCP tool exposes audience data.
+- target: $.components.schemas.Response
+  description: Document the dual-purpose envelope.
+  update:
+    x-envelope-note: >-
+      Used for BOTH success and error outcomes, discriminated by the `code` string. Not RFC 9457.
+- target: $
+  description: Record cross-surface facts the single-spec document cannot express.
+  update:
+    x-related-surfaces:
+      mcp_server: https://mcp.sharethis.com
+      mcp_tool_crosswalk: ../mcp/sharethis-tool-crosswalk.yml
+      share_count_api: https://count-server.sharethis.com/v2.0/get_counts
+    x-operationid-coverage:
+      declared: 3
+      total: 14
+      note: >-
+        Only listPropertyApps, getPropertyApp and deletePropertyApp carry operationIds in the
+        provider's original document.

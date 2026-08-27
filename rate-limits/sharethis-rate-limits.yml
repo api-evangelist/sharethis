@@ -1,0 +1,59 @@
+generated: '2026-08-27'
+method: probed
+source: >-
+  openapi/sharethis-platform-api.json, https://sharethis.com/platform-api/, and live response-header
+  inspection of https://count-server.sharethis.com/v2.0/get_counts and
+  https://platform-api.sharethis.com (2026-08-27)
+limit_count: 0
+note: >-
+  ShareThis publishes no rate limits for any of its three API surfaces, and returns no rate-limit
+  headers. This is an honest zero, established two ways: the OpenAPI document contains no
+  RateLimit-*, X-RateLimit-* or Retry-After header declaration and no 429 response on any of the 14
+  operations, and a live unauthenticated call to the share-count API returned only CloudFront edge
+  headers with no rate-limit family present. The quota errors ShareThis DOES publish are resource
+  caps, not request-rate limits, and are recorded separately below.
+rate_limits: []
+response_headers:
+  observed: none
+  ratelimit_standard: absent
+  x_ratelimit: absent
+  retry_after: absent
+  evidence: >-
+    Live GET https://count-server.sharethis.com/v2.0/get_counts?url=https://www.sharethis.com
+    returned HTTP 200 with server: CloudFront and via: CloudFront and no rate-limit header of any
+    form.
+status_on_exhaustion:
+  documented: false
+  http_429_declared: false
+  note: No operation in the contract declares a 429 response.
+resource_quotas:
+  note: >-
+    Distinct from rate limiting — these cap how many objects an account may hold, not how fast it may
+    call. Both are enforced (they have dedicated error codes) but neither numeric value is published.
+  quotas:
+  - resource: Property
+    error_status: 403
+    error_description: Property limit exceeded
+    operation: 'POST /properties/'
+    limit_value: not published
+  - resource: OAuth client
+    error_status: 403
+    error_code: OAUTH_CLIENT_LIMIT_EXCEEDED
+    operation: 'POST /oauth-clients'
+    limit_value: not published
+  - resource: App configurations per property
+    limit_value: 4
+    source: >-
+      Structural — the app_id enum has exactly four values, so a property cannot hold more than four
+      app configurations.
+upstream_dependency_signal:
+  note: >-
+    POST /generate-ai-summary declares a 503 AI_SUMMARY_UNAVAILABLE covering "a transient upstream
+    fault — 429/5xx/network/timeout — safe to retry". This is the only place the contract
+    acknowledges rate limiting at all, and it refers to ShareThis's own upstream model provider
+    rather than to a limit imposed on the caller. No Retry-After accompanies it, so an agent must
+    choose its own backoff.
+agent_impact: >-
+  With no published limits, no headers and no 429, an agent cannot pace itself proactively and
+  cannot distinguish throttling from failure. Combined with the absent status page and absent
+  request-id (see conventions/), a ShareThis integration has no runtime observability contract.

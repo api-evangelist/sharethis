@@ -1,0 +1,100 @@
+generated: '2026-08-27'
+method: probed
+source: live GET of /.well-known/* on every ShareThis host in apis.yml
+note: >-
+  The ShareThis MCP host is the only ShareThis host serving real .well-known documents; it publishes
+  a complete OAuth 2.1 / OpenID-style discovery triple. platform.sharethis.com is a single-page app
+  whose catch-all answers HTTP 200 with the same HTML shell for EVERY /.well-known/* path — those
+  200s are recorded below but are explicitly NOT documents and earn no credit. sharethis.com (a
+  WordPress site behind an edge policy) returns 403 for the whole /.well-known/ prefix, and the
+  API hosts return their normal JSON 404. No security.txt, no api-catalog, no ai-plugin.json and
+  no agent card is served anywhere on the estate.
+hosts:
+- host: mcp.sharethis.com
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: sharethis-mcp-oauth-protected-resource.json
+    content_type: application/json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: sharethis-mcp-oauth-authorization-server.json
+    content_type: application/json
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: sharethis-mcp-openid-configuration.json
+    content_type: application/json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: sharethis.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    note: edge policy returns an HTML 403 for the entire /.well-known/ prefix
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  - path: /.well-known/ai-plugin.json
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+- host: platform.sharethis.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    note: >-
+      NOT a document. SPA catch-all — returns the identical text/html ShareThis app shell for every
+      /.well-known/* path probed. Recorded as a miss.
+  - path: /.well-known/openid-configuration
+    status: 200
+    note: NOT a document — same SPA HTML shell.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    note: NOT a document — same SPA HTML shell.
+  - path: /.well-known/api-catalog
+    status: 200
+    note: NOT a document — same SPA HTML shell.
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    note: NOT a document — same SPA HTML shell.
+  - path: /.well-known/agent-card.json
+    status: 200
+    note: NOT a document — same SPA HTML shell.
+  - path: /.well-known/agent.json
+    status: 200
+    note: NOT a document — same SPA HTML shell.
+- host: platform-api.sharethis.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: count-server.sharethis.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403

@@ -1,0 +1,82 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://sharethis.com/platform/, https://sharethis.com/support/,
+  openapi/sharethis-platform-api.json (app_id enum + config schemas), and
+  https://platform-api.sharethis.com/js/sharethis.js (probed 2026-08-27)
+summary: >-
+  Embeddable UI components are ShareThis's core product, not a side offering. Every component is
+  loaded by one browser script and configured server-side against a Property, which means the
+  Platform API and MCP server are effectively a configuration plane for these embeds — an unusual
+  and quite coherent arrangement: an agent changes an app config through MCP and the rendered widget
+  on the publisher's site changes.
+loader:
+  name: sharethis.js
+  url: https://platform-api.sharethis.com/js/sharethis.js
+  type: universal browser loader
+  pinned: false
+  integrity_hash: false
+  size_bytes: 223608
+  note: >-
+    Single script tag, keyed to a property. Unpinned and served without subresource integrity — see
+    packages/sharethis-packages.yml.
+families:
+- family: Share Buttons
+  components:
+  - id: inline-share-buttons
+    config_schema: components.schemas.InlineShareButtonConfig
+    networks_vocabulary: components.schemas.ShareNetworks
+    note: Rendered in the page flow.
+  - id: sticky-share-buttons
+    config_schema: components.schemas.StickyShareButtonsConfig
+    networks_vocabulary: components.schemas.ShareNetworks
+    note: Fixed/floating rail.
+  variants_documented:
+  - Image Share Buttons
+  - Video Share Buttons
+  variants_note: >-
+    Marketed as distinct products on https://sharethis.com/platform/ but not represented as separate
+    app_id values in the API contract's four-value enum.
+- family: Follow Buttons
+  components:
+  - id: inline-follow-buttons
+    config_schema: components.schemas.InlineFollowButtonsConfig
+    networks_vocabulary: components.schemas.FollowNetworks
+- family: Reaction Buttons
+  components:
+  - id: inline-reaction-buttons
+    config_schema: components.schemas.InlineReactionButtonsConfig
+    reactions_vocabulary: components.schemas.Reactions
+    note: >-
+      The live share-count API confirms the deployed reaction vocabulary in production —
+      slight_smile, heart_eyes, laughing, astonished, rage, sob.
+- family: Privacy Tools
+  components:
+  - id: privacy-policy-generator
+    api_configurable: false
+  - id: consent-management-platform
+    api_configurable: false
+  note: >-
+    Documented as products on https://sharethis.com/platform/ but NOT part of the app_id enum and
+    not configurable through the Platform API or MCP server.
+api_configurable_components:
+  count: 4
+  enum_source: openapi/sharethis-platform-api.json app_id
+  values:
+  - inline-share-buttons
+  - sticky-share-buttons
+  - inline-follow-buttons
+  - inline-reaction-buttons
+  note: >-
+    Exactly these four can be created, read, updated and deleted through the API and the MCP server.
+    Everything else on the platform page is install-only.
+live_preview:
+  available: true
+  via: 'MCP tool sharethis_apps_liveview'
+  note: >-
+    Renders the saved configuration of an app through the property's sharethis.js runtime — the only
+    published way to inspect a component's rendered state programmatically.
+framework_wrappers:
+  note: >-
+    React, Angular, WordPress and Magento wrappers around these same components are catalogued in
+    packages/sharethis-packages.yml.

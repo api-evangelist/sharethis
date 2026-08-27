@@ -1,0 +1,94 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  registry.npmjs.org, repo.packagist.org, api.wordpress.org/plugins, api.github.com/orgs/sharethis-github,
+  and https://sharethis.com/support/ (probed 2026-08-27)
+summary: >-
+  ShareThis distributes an installable plugin per CMS/framework rather than a conventional API client
+  SDK. NONE of these packages wrap the Platform API — every one of them is a front-end embed for the
+  share/follow/reaction buttons. There is no first-party client library for the Platform API, the
+  share-count API or the MCP server in any language, in any registry. The currency spread is the
+  story: the WordPress plugin was updated a week before this profile, while the React and Angular
+  packages have not shipped a release in 4-6 years.
+packages:
+- name: sharethis-share-buttons
+  registry: wordpress.org
+  official: true
+  language: PHP
+  version: 2.3.12
+  published: '2026-08-20'
+  url: https://wordpress.org/plugins/sharethis-share-buttons/
+  author: ShareThis (https://profiles.wordpress.org/sharethis/)
+  wraps: share/follow/reaction button embed
+  note: >-
+    The actively maintained flagship distribution — released one week before this profile was
+    written. This is where ShareThis's engineering attention visibly is.
+- name: sharethis-reactjs
+  registry: npm
+  official: true
+  language: JavaScript
+  version: 1.6.0
+  published: '2020-08-04'
+  license: UPL-1.0
+  url: https://www.npmjs.com/package/sharethis-reactjs
+  repository: https://github.com/sharethis-github/sharethis-reactjs
+  wraps: >-
+    React components — InlineShareButtons, StickyShareButtons, InlineFollowButtons,
+    InlineReactionButtons
+  note: >-
+    Described by ShareThis as the official React module. Last npm release 2020-08-04 — six years
+    stale as of this profile, though the GitHub repository saw commits as recently as 2024-08-29,
+    so the published package lags the source.
+- name: sharethis-angular
+  registry: npm
+  official: true
+  language: TypeScript
+  version: 2.1.3
+  published: '2022-10-26'
+  url: https://www.npmjs.com/package/sharethis-angular
+  repository: https://github.com/sharethis-github/sharethis-angular
+  wraps: Angular share button components
+  note: Last release 2022-10-26 — four years stale. No declared license on the npm record.
+- name: sharethis/magento-sharethis-sharebuttons
+  registry: packagist
+  official: true
+  language: PHP
+  version: null
+  published: null
+  url: https://packagist.org/packages/sharethis/magento-sharethis-sharebuttons
+  repository: https://github.com/sharethis-github/magento-sharethis-share-buttons
+  wraps: Magento share button module
+  note: >-
+    Published under the vendor namespace `sharethis`, and the GitHub source lives in ShareThis's own
+    organization, so first-party attribution is solid. Version and release date recorded as null —
+    the Packagist package metadata endpoint did not return a parseable version list on probe, so
+    currency was NOT established rather than guessed.
+- name: sharethis.js
+  registry: cdn
+  official: true
+  language: JavaScript
+  version: null
+  published: null
+  url: https://platform-api.sharethis.com/js/sharethis.js
+  wraps: >-
+    The universal browser loader every ShareThis button embed depends on; also the runtime behind
+    the MCP sharethis_apps_liveview tool.
+  note: >-
+    UNPINNED distribution. The documented script URL carries no version segment and no integrity
+    hash, and floats to whatever ShareThis currently serves (223,608 bytes on probe, HTTP 200 via
+    CloudFront). Recorded as version null deliberately: a consumer embedding this tag cannot tell
+    what version they are running either, which is the finding. In practice the property key is
+    appended as a query parameter rather than the version being selectable.
+no_api_client_sdk:
+  finding: true
+  detail: >-
+    Searched npm, PyPI, Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist and crates.io plus the
+    ShareThis GitHub organization (20 repositories). No first-party client library exists for the
+    ShareThis Platform API, the Social Share Count API, or the MCP server. The only ShareThis-authored
+    code artifacts are button embeds and — for the sibling Predactiv platform — the
+    predactiv-mcp-python-samples repository, which is example agent code rather than a distributable
+    package.
+third_party_note: >-
+  Several unaffiliated packages exist (react-sharethis, share-this, sunnysideup/sharethis,
+  nitsan/ns-sharethis, clubdeuce/wp-share-this and others). They are NOT ShareThis-authored and are
+  deliberately excluded from packages[] above.

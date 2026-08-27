@@ -1,0 +1,80 @@
+generated: '2026-08-27'
+method: generated
+source: >-
+  Generated from openapi/sharethis-platform-api.json (verified operationIds and paths) and
+  mcp/sharethis-mcp-tools.json (verified tool names and inputSchemas, read live from
+  https://mcp.sharethis.com on 2026-08-27), plus conventions/, errors/ and rate-limits/.
+note: >-
+  ShareThis publishes no skills or AGENTS.md of its own — these are API Evangelist-authored. Every
+  operation name, tool name, parameter and error code cited is verified against the two machine-
+  readable contracts; none is invented. The safety guidance in each skill reflects the genuine
+  absence of idempotency and reversibility on this API, documented in conventions/.
+skills:
+- name: sharethis-onboard-property
+  file: sharethis-onboard-property.md
+  description: >-
+    Register a domain as a ShareThis property and verify ownership, over MCP or REST. Covers the
+    unguarded-create hazard and the fact that properties cannot be deleted.
+  api: ShareThis Platform API
+  surfaces:
+  - rest
+  - mcp
+  operations:
+  - 'POST /properties/'
+  - 'POST /properties/{property_id}/validate'
+  - 'GET /properties'
+  - 'GET /properties/{property_id}'
+  mcp_tools:
+  - sharethis_properties_create
+  - sharethis_properties_validate
+  - sharethis_properties_list
+  - sharethis_properties_get
+  write_operations: true
+  reversible: false
+- name: sharethis-configure-buttons
+  file: sharethis-configure-buttons.md
+  description: >-
+    Configure, inspect and remove the four ShareThis button apps on a verified property. Covers the
+    overwrite-on-upsert hazard and the single destructive delete.
+  api: ShareThis Platform API
+  surfaces:
+  - rest
+  - mcp
+  operations:
+  - 'POST /properties/{property_id}/apps'
+  - listPropertyApps
+  - getPropertyApp
+  - deletePropertyApp
+  mcp_tools:
+  - sharethis_apps_upsert
+  - sharethis_apps_list
+  - sharethis_apps_get
+  - sharethis_apps_delete
+  - sharethis_apps_liveview
+  write_operations: true
+  reversible: false
+- name: sharethis-share-counts
+  file: sharethis-share-counts.md
+  description: >-
+    Read aggregate social share, click and reaction counts for any public URL. No authentication
+    required; read-only.
+  api: ShareThis Social Share Count API
+  surfaces:
+  - rest
+  operations:
+  - 'GET /get_counts'
+  mcp_tools: []
+  write_operations: false
+  reversible: na
+  note: The only ShareThis surface an agent can use with zero onboarding.
+not_covered:
+- surface: 'POST /generate-ai-summary'
+  reason: >-
+    In the REST contract but has no MCP tool and no public documentation of its request body
+    semantics beyond the spec; not enough published detail to ground a safe skill.
+- surface: 'POST /audience-pageviews'
+  reason: >-
+    Audience data operation with no MCP tool and no published documentation of its parameters or
+    response shape.
+- surface: '/oauth-clients'
+  reason: Credential administration — deliberately not packaged as an agent skill.

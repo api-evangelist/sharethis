@@ -1,0 +1,120 @@
+generated: '2026-08-27'
+method: probed
+source: >-
+  openapi/sharethis-platform-api.json, live OAuth discovery documents on mcp.sharethis.com, live MCP
+  JSON-RPC probes, and https://sharethis.com/privacy/ (2026-08-27)
+standards:
+- id: openapi
+  name: OpenAPI Specification
+  conforms: true
+  version: 3.0.3
+  evidence: >-
+    openapi/sharethis-platform-api.json parses as OpenAPI 3.0.3 with 12 paths / 14 operations,
+    10 component schemas and a declared securityScheme. Served publicly and unauthenticated at
+    https://platform-api.sharethis.com/v2.0/openapi.json.
+- id: mcp
+  name: Model Context Protocol
+  conforms: true
+  evidence: >-
+    Live JSON-RPC 2.0 tools/list at https://mcp.sharethis.com returned nine tools each carrying
+    inputSchema, outputSchema and annotations. Provider documents the server at
+    https://sharethis.com/mcp/ and publishes connection guides for ChatGPT, Claude, Cursor and Manus.
+- id: oauth2
+  name: OAuth 2.1
+  conforms: true
+  evidence: >-
+    authorization_code and client_credentials grants with mandatory PKCE S256, advertised at
+    https://mcp.sharethis.com/.well-known/oauth-authorization-server.
+- id: rfc8414
+  name: OAuth 2.0 Authorization Server Metadata
+  conforms: true
+  evidence: >-
+    /.well-known/oauth-authorization-server returns HTTP 200 with issuer, authorization_endpoint,
+    token_endpoint, response_types_supported, grant_types_supported,
+    token_endpoint_auth_methods_supported and code_challenge_methods_supported.
+- id: rfc9728
+  name: OAuth 2.0 Protected Resource Metadata
+  conforms: true
+  evidence: >-
+    /.well-known/oauth-protected-resource returns HTTP 200 with resource, authorization_servers and
+    scopes_supported (mcp:tools).
+- id: rfc7636
+  name: PKCE
+  conforms: true
+  evidence: 'code_challenge_methods_supported: ["S256"] — S256 only, plain is not offered.'
+- id: oidc
+  name: OpenID Connect
+  conforms: false
+  evidence: >-
+    An /.well-known/openid-configuration document is served, but it advertises no id_token, no
+    userinfo_endpoint and no jwks_uri. It is an OAuth metadata document under an OIDC filename, not
+    an OIDC provider.
+- id: rfc9457
+  name: Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    Errors use a proprietary {code, data} envelope with no application/problem+json media type and
+    no type/title/detail/instance members.
+- id: rfc9116
+  name: security.txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on mcp.sharethis.com and platform-api.sharethis.com and
+    403 on sharethis.com and count-server.sharethis.com. No security.txt is served on the estate.
+- id: rfc8594
+  name: 'Sunset HTTP Header'
+  conforms: false
+  evidence: No Sunset or Deprecation header is declared on any operation and no deprecation policy is published.
+- id: idempotency
+  name: Idempotency keys
+  conforms: false
+  evidence: Zero occurrences of "idempoten" in the OpenAPI document; no Idempotency-Key header declared.
+- id: pagination
+  name: Collection pagination
+  conforms: false
+  evidence: No page/offset/cursor/limit parameters on any of the three collection operations.
+- id: rfc9110_ratelimit
+  name: RateLimit header fields
+  conforms: false
+  evidence: >-
+    No RateLimit-* or Retry-After header declared in the contract or observed on live responses.
+- id: a2a
+  name: A2A Agent Card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json probed on every ShareThis host —
+    404 on mcp.sharethis.com and platform-api.sharethis.com, 403 on sharethis.com and
+    count-server.sharethis.com, and an SPA HTML shell (not a card) on platform.sharethis.com.
+domain_standards:
+- id: iab-tcf
+  name: IAB Europe Transparency and Consent Framework (TCF)
+  conforms: partial
+  scored: false
+  evidence: >-
+    ShareThis's GitHub organization carries forks of the official TCF technical specifications
+    (GDPR-Transparency-and-Consent-Framework) and the official IAB TCF tool suite (iabtcf-es), both
+    now ARCHIVED, and the company ships a Consent Management Platform product. This is an
+    organizational/product signal, NOT a contract signal — the Platform API contract declares no TCF
+    string, no consent payload and no CMP interface, so it earns no domain_standard_conformance
+    credit here. Recorded because the adtech regime is where a ShareThis domain standard would
+    live, and this is the honest state of it.
+  caveat: >-
+    Both TCF repositories are archived, so this reflects past participation rather than current
+    maintained conformance.
+- id: openrtb
+  name: OpenRTB
+  conforms: false
+  evidence: >-
+    ShareThis operates in programmatic advertising (audiences, targeting, data feeds) where OpenRTB
+    is the market standard, but no bid endpoint, bid request/response schema or OpenRTB reference
+    appears in any published ShareThis contract. The data business is delivered through partner
+    platforms (LiveRamp, The Trade Desk) rather than through a ShareThis-published RTB surface.
+compliance_certifications:
+  published: false
+  evidence: >-
+    probe-security-programs.py found no trust center and no named certification (SOC 2 / ISO 27001 /
+    PCI / HIPAA / FedRAMP) on any ShareThis property. Privacy commitments are published at
+    https://sharethis.com/privacy/ with GDPR/CCPA data-subject request and do-not-sell mechanisms
+    (https://sharethis.com/data-subject-privacy-request/,
+    https://sharethis.com/do-not-sell-my-data-page/), but these are legal policy pages, not an
+    audited compliance program.

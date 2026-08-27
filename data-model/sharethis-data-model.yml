@@ -1,0 +1,123 @@
+generated: '2026-08-27'
+method: derived
+source: openapi/sharethis-platform-api.json (components.schemas $refs + id-reference fields)
+summary: >-
+  A small, shallow two-level graph. A ShareThis account owns Properties (one per website domain),
+  and each Property carries up to four App configurations — one per button type. The four app
+  config schemas are siblings that never reference each other, and each embeds one of three shared
+  network/reaction vocabularies. OAuthClient hangs off the account independently of properties.
+entities:
+- name: Property
+  schema: components.schemas.Property
+  identifier: _id
+  identifier_note: >-
+    The schema names the field `_id` (a MongoDB-style 24-hex ObjectId, example
+    64c8c9e21a2b4c0012345678) while every path parameter and the MCP tool schemas call it
+    `property_id`. Same value, two names across the contract — an agent binding response fields to
+    request parameters must know they are the same.
+  fields:
+  - _id
+  - domain
+  - slug
+  - verified
+  - locked
+  - created_at
+  - updated_at
+  lifecycle_note: >-
+    A Property is created unverified; POST /properties/{property_id}/validate flips `verified` to
+    true by checking a file on the domain. `locked` is exposed but its semantics are not documented.
+- name: App
+  identifier: app_id
+  enum_values:
+  - inline-share-buttons
+  - sticky-share-buttons
+  - inline-follow-buttons
+  - inline-reaction-buttons
+  note: >-
+    App is not a free-form entity — app_id is drawn from a closed set of four button products, and
+    each value selects a different config schema. There is no App schema in components; the shape
+    is carried by the four *Config schemas below.
+- name: InlineShareButtonConfig
+  schema: components.schemas.InlineShareButtonConfig
+  embeds:
+  - ShareNetworks
+- name: StickyShareButtonsConfig
+  schema: components.schemas.StickyShareButtonsConfig
+  embeds:
+  - ShareNetworks
+- name: InlineFollowButtonsConfig
+  schema: components.schemas.InlineFollowButtonsConfig
+  embeds:
+  - FollowNetworks
+- name: InlineReactionButtonsConfig
+  schema: components.schemas.InlineReactionButtonsConfig
+  embeds:
+  - Reactions
+- name: ShareNetworks
+  schema: components.schemas.ShareNetworks
+  kind: vocabulary
+  note: Shared network vocabulary reused by both share-button config schemas.
+- name: FollowNetworks
+  schema: components.schemas.FollowNetworks
+  kind: vocabulary
+- name: Reactions
+  schema: components.schemas.Reactions
+  kind: vocabulary
+- name: OAuthClient
+  schema: components.schemas.OAuthClient
+  identifier: client_id
+  note: Account-scoped API credential; not attached to a Property.
+- name: Response
+  schema: components.schemas.Response
+  kind: envelope
+  note: Universal {code, data} wrapper — see errors/sharethis-problem-types.yml.
+relationships:
+- from: Account
+  to: Property
+  type: has_many
+  via: bearer token identity (the authenticated user)
+  note: >-
+    Not modeled as a field — every /properties operation is implicitly scoped to the token holder.
+    There is no account entity in the contract.
+- from: Property
+  to: App
+  type: has_many
+  via: path parameter property_id
+  cardinality_note: At most four, one per app_id value.
+- from: App
+  to: Property
+  type: belongs_to
+  via: property_id
+- from: InlineShareButtonConfig
+  to: ShareNetworks
+  type: has_one
+  via: $ref
+- from: StickyShareButtonsConfig
+  to: ShareNetworks
+  type: has_one
+  via: $ref
+- from: InlineFollowButtonsConfig
+  to: FollowNetworks
+  type: has_one
+  via: $ref
+- from: InlineReactionButtonsConfig
+  to: Reactions
+  type: has_one
+  via: $ref
+- from: Account
+  to: OAuthClient
+  type: has_many
+  via: bearer token identity
+id_conventions:
+  property: 24-character hexadecimal ObjectId (example 64c8c9e21a2b4c0012345678)
+  app: >-
+    Not an opaque id — a fixed slug from the four-value enum, so an agent can address an app without
+    first listing it.
+  no_prefixes: >-
+    ShareThis does not use typed id prefixes (no prop_/app_ style). Ids are bare hex strings, so an
+    id alone does not tell an agent what kind of object it addresses.
+external_surface:
+  note: >-
+    The Social Share Count API (count-server.sharethis.com) is keyed on a raw URL, not on any entity
+    id in this graph. It shares no identifiers with the Platform API — the two ShareThis APIs are
+    genuinely disjoint data models.

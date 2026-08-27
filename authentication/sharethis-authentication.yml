@@ -1,0 +1,101 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  openapi/sharethis-platform-api.json (securitySchemes), https://sharethis.com/platform-api/,
+  https://mcp.sharethis.com/ and the live OAuth metadata at
+  https://mcp.sharethis.com/.well-known/oauth-authorization-server (probed 2026-08-27)
+summary:
+  types:
+  - http
+  - oauth2
+  note: >-
+    ShareThis runs TWO different auth models across one product. The REST Platform API uses a
+    bearer JWT minted by its own login endpoint; the MCP server uses OAuth 2.1 authorization-code
+    with PKCE. They are not interchangeable — a Platform API token will not authorize an MCP call.
+schemes:
+- name: BearerToken
+  surface: ShareThis Platform API
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  obtain_via: 'POST https://platform-api.sharethis.com/v2.0/auth/login'
+  credential_input: ShareThis account credentials
+  applied_to: >-
+    All operations except POST /auth/login (13 of 14). Security is declared per-operation rather
+    than by a global security requirement.
+  scopes: none
+  expiry: not documented
+  refresh: >-
+    No refresh-token flow is documented for this surface; the contract exposes only the login
+    exchange.
+  sources:
+  - openapi/sharethis-platform-api.json
+- name: OAuth2 (MCP)
+  surface: ShareThis MCP Server
+  type: oauth2
+  spec: OAuth 2.1 with RFC 8414 authorization-server metadata and RFC 9728 protected-resource metadata
+  issuer: https://mcp.sharethis.com
+  authorization_endpoint: https://mcp.sharethis.com/oauth/authorize
+  token_endpoint: https://mcp.sharethis.com/oauth/token
+  grant_types:
+  - authorization_code
+  - client_credentials
+  response_types:
+  - code
+  pkce:
+    required_methods:
+    - S256
+  token_endpoint_auth_methods:
+  - none
+  - client_secret_basic
+  scopes:
+  - name: mcp:tools
+    description: >-
+      Invoke MCP tools on the ShareThis MCP server. The only scope the authorization server
+      advertises.
+  resource: https://mcp.sharethis.com
+  authorization_servers:
+  - https://mcp.sharethis.com
+  discovery_documents:
+  - path: /.well-known/oauth-protected-resource
+    file: well-known/sharethis-mcp-oauth-protected-resource.json
+  - path: /.well-known/oauth-authorization-server
+    file: well-known/sharethis-mcp-oauth-authorization-server.json
+  - path: /.well-known/openid-configuration
+    file: well-known/sharethis-mcp-openid-configuration.json
+  prerequisite: >-
+    A ShareThis account must exist at https://platform.sharethis.com before OAuth linking succeeds.
+  sources:
+  - https://mcp.sharethis.com/.well-known/oauth-authorization-server
+  - https://mcp.sharethis.com/
+- name: OAuth client management
+  surface: ShareThis Platform API
+  type: provisioning
+  note: >-
+    The Platform API also exposes POST/GET /oauth-clients and DELETE /oauth-clients/{client_id},
+    letting an account mint and revoke its own OAuth clients. Client creation is quota-limited
+    (403 OAUTH_CLIENT_LIMIT_EXCEEDED); the numeric limit is not published.
+unauthenticated_surface:
+- api: ShareThis Social Share Count API
+  base_url: https://count-server.sharethis.com/v2.0
+  auth: none
+  verified: >-
+    Live GET of /get_counts?url=https://www.sharethis.com returned HTTP 200 with a full counts
+    payload and no credential of any kind (probed 2026-08-27).
+  note: >-
+    Genuinely open. This is the surface an agent can call today with zero onboarding, and the only
+    ShareThis API that needs no account.
+- surface: MCP tools/list discovery
+  auth: none
+  note: >-
+    tools/list on https://mcp.sharethis.com responds anonymously with complete input and output
+    schemas. Discovery is open; invocation is not.
+openid_connect:
+  present: false
+  note: >-
+    An /.well-known/openid-configuration document IS served on mcp.sharethis.com, but it is an
+    OAuth authorization-server document wearing the OIDC filename — it advertises no id_token,
+    no userinfo_endpoint, no jwks_uri and no OIDC response types. It should not be read as an
+    OpenID Connect provider.
+mutual_tls: false
+api_keys: false

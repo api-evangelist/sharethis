@@ -1,23 +1,159 @@
 aid: sharethis
 name: ShareThis
-description: 'ShareThis is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: ShareThis is a Palo Alto, California website-tools and audience-data company, founded in
+  2007 and now operating as a brand of Predactiv following the 2024 corporate rebrand. Its share, follow,
+  reaction, image and video buttons are embedded across millions of publisher sites via a single sharethis.js
+  loader, and the resulting real-time sharing behavior feeds the company's audience, analytics and targeting
+  data products. For developers ShareThis publishes an OpenAPI 3.0.3-described Platform API for managing
+  properties, app configurations, OAuth clients and AI summaries, an unauthenticated Social Share Count
+  API, and a remote Model Context Protocol server at mcp.sharethis.com that exposes property and app management
+  to AI agents over OAuth.
 url: https://raw.githubusercontent.com/api-evangelist/sharethis/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-27'
 modified: '2026-08-27'
+image: https://sharethis-com.imgix.net/uploads/2016/08/favicon.png
 tags:
 - Company
-apis: []
+- Social Sharing
+- Website Tools
+- Audience Data
+- Advertising Technology
+- Analytics
+- Consent Management
+- Publishing
+- Model Context Protocol
+apis:
+- name: ShareThis Platform API
+  description: REST API for managing ShareThis properties and the apps configured on them — create and
+    list properties, validate domain ownership, upsert/list/get/delete app configurations (inline share,
+    sticky share, inline follow, inline reaction buttons), manage OAuth clients, request audience pageviews,
+    and generate AI summaries. Bearer-token authenticated via POST /auth/login.
+  humanURL: https://sharethis.com/platform-api/
+  baseURL: https://platform-api.sharethis.com/v2.0
+  tags:
+  - Properties
+  - Apps
+  - OAuth Clients
+  - Authentication
+  - AI Summary
+  - Audience
+  properties:
+  - type: OpenAPI
+    url: openapi/sharethis-platform-api.json
+  - type: Documentation
+    url: https://sharethis.com/api-docs/
+  - type: APIReference
+    url: https://sharethis.com/platform-api/
+  - type: Overlay
+    url: overlays/sharethis-platform-api-overlay.yaml
+  - type: Authentication
+    url: authentication/sharethis-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sharethis-problem-types.yml
+  - type: DataModel
+    url: data-model/sharethis-data-model.yml
+- name: ShareThis Social Share Count API
+  description: Public, unauthenticated GET endpoint returning aggregate social sharing metrics for any
+    URL — clicks and shares broken out per network (facebook, twitter, linkedin, pinterest, whatsapp and
+    dozens more), plus reaction counts and totals. Takes a single required url parameter; an optional
+    wd=true flag serves counts for the legacy wd.sharethis.com widget.
+  humanURL: https://sharethis.com/support/customization/social-share-count-api/
+  baseURL: https://count-server.sharethis.com/v2.0
+  tags:
+  - Share Counts
+  - Analytics
+  - Public API
+  properties:
+  - type: Documentation
+    url: https://sharethis.com/support/customization/social-share-count-api/
+- name: ShareThis MCP Server
+  description: First-party remote Model Context Protocol server letting AI assistants create and manage
+    ShareThis properties, validate domain ownership, configure apps and inspect live app output. JSON-RPC
+    2.0 over POST to the host root, OAuth 2.1 account linking with PKCE, nine published tools with full
+    JSON Schema input and output contracts.
+  humanURL: https://sharethis.com/mcp/
+  baseURL: https://mcp.sharethis.com
+  tags:
+  - Model Context Protocol
+  - AI Agents
+  - Properties
+  - Apps
+  properties:
+  - type: MCPServer
+    url: mcp/sharethis-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/sharethis-tool-crosswalk.yml
+  - type: Documentation
+    url: https://sharethis.com/mcp/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/sharethis-domain-security.yml
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://sharethis.com/
+- type: DeveloperPortal
+  url: https://sharethis.com/platform-api/
+- type: Documentation
+  url: https://sharethis.com/api-docs/
+- type: APIReference
+  url: https://sharethis.com/platform-api/
+- type: GettingStarted
+  url: https://sharethis.com/mcp/
+- type: Support
+  url: https://sharethis.com/support/
+- type: Blog
+  url: https://sharethis.com/blog/
+- type: BlogRSS
+  url: https://sharethis.com/feed/
+- type: GitHubOrganization
+  url: https://github.com/sharethis-github
+- type: SignUp
+  url: https://platform.sharethis.com
+- type: TermsOfService
+  url: https://sharethis.com/publisher-terms-of-use/
+- type: PrivacyPolicy
+  url: https://sharethis.com/privacy/
+- type: Packages
+  url: packages/sharethis-packages.yml
+- type: SDKs
+  url: packages/sharethis-packages.yml
+- type: WellKnown
+  url: well-known/sharethis-well-known.yml
+- type: LLMsTxt
+  url: llms/sharethis-llms.txt
+- type: Conformance
+  url: conformance/sharethis-conformance.yml
+- type: Lifecycle
+  url: lifecycle/sharethis-lifecycle.yml
+- type: OAuthScopes
+  url: scopes/sharethis-scopes.yml
+- type: Authentication
+  url: authentication/sharethis-authentication.yml
+- type: Conventions
+  url: conventions/sharethis-conventions.yml
+- type: Components
+  url: components/sharethis-components.yml
+- type: DataModel
+  url: data-model/sharethis-data-model.yml
+- type: ErrorCatalog
+  url: errors/sharethis-problem-types.yml
+- type: Plans
+  url: plans/sharethis-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/sharethis-rate-limits.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: MCPServer
+  url: mcp/sharethis-mcp.yml
+x-enrichment:
+  date: '2026-08-27'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v1

@@ -1,0 +1,64 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  openapi/sharethis-platform-api.json, https://sharethis.com/platform-api/,
+  https://sharethis.com/support/, and live probes for a status page and changelog (2026-08-27)
+versioning:
+  scheme: URI path segment
+  current: v2.0
+  spec_info_version: 2.0.0
+  predecessors_observed:
+  - v1 (implied by the v2.0 designation; no v1 contract is published)
+  - >-
+    wd.sharethis.com — an explicitly named LEGACY widget still supported by the share-count API via
+    the wd=true parameter. This is the clearest deprecation signal ShareThis publishes, and it is
+    published in support documentation rather than in any policy.
+  note: >-
+    Version is pinned in the base URL for both the Platform API and the share-count API. No version
+    header, no date-versioning, no negotiation.
+deprecation_policy:
+  published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  evidence: >-
+    No deprecation or versioning policy page was found on sharethis.com; no operation in the OpenAPI
+    is marked deprecated:true; no Sunset or Deprecation response header is declared anywhere in the
+    contract.
+  impact: >-
+    A consumer has no published notice period. The legacy wd.sharethis.com widget shows ShareThis
+    does keep old surfaces alive for a long time in practice, but practice is not a commitment.
+deprecated_operations:
+  count: 0
+  note: Zero operations carry deprecated:true in the OpenAPI document.
+status_page:
+  published: false
+  evidence: >-
+    status.sharethis.com does not resolve in DNS (NXDOMAIN, probed 2026-08-27); no statuspage.io or
+    equivalent property was found linked from sharethis.com or the support centre.
+  impact: >-
+    No machine-readable or human-readable availability signal. An agent cannot distinguish a
+    ShareThis outage from its own failure, which matters more than usual here because the contract
+    also publishes no Retry-After and no rate-limit headers.
+changelog:
+  published: false
+  evidence: >-
+    /changelog/ and /support/category/release-notes/ both return HTTP 404; no dated release notes
+    were found in the support centre or on the platform-api page.
+  partial_signal: >-
+    The OpenAPI document itself is the only versioned artifact — info.version 2.0.0 — but it is not
+    dated and carries no history.
+sla:
+  published: false
+  evidence: No service-level agreement or uptime commitment was found on any public ShareThis page.
+support:
+  channel: https://sharethis.com/support/
+  type: self-service knowledge base
+  note: >-
+    The platform SPA loads a Zendesk widget (static.zdassets.com snippet), indicating ticketed
+    support behind the platform login, but no public developer support forum or community was found.
+maturity_assessment: >-
+  The API surface is actively developed — a 2026-era MCP server with OAuth 2.1 and PKCE, an
+  AI-summary operation, and a live OpenAPI document all indicate current investment. What is missing
+  is the operational scaffolding around it: no status page, no changelog, no deprecation policy and
+  no SLA. This is a maintained API without a published operational contract.

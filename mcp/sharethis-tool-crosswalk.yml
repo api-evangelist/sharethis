@@ -1,0 +1,126 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  mcp/sharethis-mcp-tools.json (live anonymous tools/list, 2026-08-27) bound against
+  openapi/sharethis-platform-api.json (ShareThis Platform API 2.0.0)
+note: >-
+  ShareThis's MCP server and Platform API are unusually close projections of one core: eight of the
+  nine MCP tools map 1:1 onto a REST operation, and the naming is nearly mechanical
+  (sharethis_<resource>_<verb> -> /<resource> <METHOD>). Confidence is high on those eight because
+  BOTH sides published machine-readable schemas that could be compared field by field — the MCP
+  inputSchemas and the OpenAPI parameters/requestBodies agree. Only one tool is MCP-only and only
+  four operations are REST-only.
+surfaces:
+  openapi:
+    file: openapi/sharethis-platform-api.json
+    base_url: https://platform-api.sharethis.com/v2.0
+    gated: false
+    note: Spec is served publicly and unauthenticated; the operations it describes need a bearer token.
+  mcp:
+    url: https://mcp.sharethis.com
+    gated: false
+    note: >-
+      tools/list is anonymous — schemas were read directly, not inferred. Tool INVOCATION is
+      OAuth-gated.
+  graphql:
+    present: false
+crosswalk:
+- tool: sharethis_properties_create
+  category: properties
+  rest:
+  - 'POST /properties/'
+  binding: direct
+  confidence: high
+  note: >-
+    Tool inputSchema {domain: string, minLength 1} matches the OpenAPI requestBody for
+    POST /properties/. Operation has no operationId in the spec, so the METHOD+PATH is the
+    stable identifier.
+- tool: sharethis_properties_list
+  category: properties
+  rest:
+  - 'GET /properties'
+  binding: direct
+  confidence: high
+  note: >-
+    Empty inputSchema; outputSchema {response: array of {property_id, domain, created_at}} matches
+    the 200 response schema. No operationId in spec.
+- tool: sharethis_properties_get
+  category: properties
+  rest:
+  - 'GET /properties/{property_id}'
+  binding: direct
+  confidence: high
+  note: 'inputSchema {property_id} maps to the path parameter. No operationId in spec.'
+- tool: sharethis_properties_validate
+  category: properties
+  rest:
+  - 'POST /properties/{property_id}/validate'
+  binding: direct
+  confidence: high
+  note: Domain-ownership validation via a file placed at the property domain. No operationId in spec.
+- tool: sharethis_apps_upsert
+  category: apps
+  rest:
+  - 'POST /properties/{property_id}/apps'
+  binding: direct
+  confidence: high
+  note: >-
+    Single MCP tool covering both create and update, matching the REST endpoint's own
+    create-or-update semantics. No operationId in spec.
+- tool: sharethis_apps_list
+  category: apps
+  rest:
+  - listPropertyApps
+  binding: direct
+  confidence: high
+  note: 'GET /properties/{property_id}/apps/ — one of only three operations carrying an operationId.'
+- tool: sharethis_apps_get
+  category: apps
+  rest:
+  - getPropertyApp
+  binding: direct
+  confidence: high
+  note: 'GET /properties/{property_id}/apps/{app_id}.'
+- tool: sharethis_apps_delete
+  category: apps
+  rest:
+  - deletePropertyApp
+  binding: direct
+  confidence: high
+  note: >-
+    'DELETE /properties/{property_id}/apps/{app_id}. The only tool annotated
+    destructiveHint:true, and the only irreversible write on either surface.'
+mcp_only:
+- tool: sharethis_apps_liveview
+  reason: >-
+    Composite/rendering tool with no backing public REST operation. It resolves a property's saved
+    app configuration and renders the live view through the property's sharethis.js runtime rather
+    than returning a plain resource representation, so there is nothing in the Platform API spec to
+    bind it to.
+rest_only:
+- operation: 'POST /auth/login'
+  reason: >-
+    Bearer-token issuance for REST clients. The MCP surface uses OAuth 2.1 authorization-code +
+    PKCE instead, so this login exchange has deliberately no tool equivalent.
+- operation: 'POST /oauth-clients'
+  reason: OAuth client registration — administrative, not exposed as an agent tool.
+- operation: 'GET /oauth-clients'
+  reason: OAuth client listing — administrative, not exposed as an agent tool.
+- operation: 'DELETE /oauth-clients/{client_id}'
+  reason: OAuth client deletion — administrative, not exposed as an agent tool.
+- operation: 'POST /generate-ai-summary'
+  reason: >-
+    AI summary generation is in the REST contract but has no MCP tool. A notable gap — this is the
+    operation an agent would most plausibly want, and it is reachable over REST only.
+- operation: 'POST /audience-pageviews'
+  reason: >-
+    Audience pageview retrieval is in the REST contract but has no MCP tool; agent access to
+    audience data is REST-only.
+coverage:
+  mcp_tools: 9
+  rest_operations: 14
+  mapped: 8
+  mcp_only: 1
+  rest_only: 6
+  mcp_tool_coverage_pct: 89
+  rest_operation_coverage_pct: 57
