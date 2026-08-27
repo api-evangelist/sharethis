@@ -26,40 +26,12 @@ tags:
 - Publishing
 - Model Context Protocol
 apis:
-- name: ShareThis Platform API
-  description: REST API for managing ShareThis properties and the apps configured on them — create and
-    list properties, validate domain ownership, upsert/list/get/delete app configurations (inline share,
-    sticky share, inline follow, inline reaction buttons), manage OAuth clients, request audience pageviews,
-    and generate AI summaries. Bearer-token authenticated via POST /auth/login.
-  humanURL: https://sharethis.com/platform-api/
-  baseURL: https://platform-api.sharethis.com/v2.0
-  tags:
-  - Properties
-  - Apps
-  - OAuth Clients
-  - Authentication
-  - AI Summary
-  - Audience
-  properties:
-  - type: OpenAPI
-    url: openapi/sharethis-platform-api.json
-  - type: Documentation
-    url: https://sharethis.com/api-docs/
-  - type: APIReference
-    url: https://sharethis.com/platform-api/
-  - type: Overlay
-    url: overlays/sharethis-platform-api-overlay.yaml
-  - type: Authentication
-    url: authentication/sharethis-authentication.yml
-  - type: ErrorCatalog
-    url: errors/sharethis-problem-types.yml
-  - type: DataModel
-    url: data-model/sharethis-data-model.yml
 - name: ShareThis Social Share Count API
-  description: Public, unauthenticated GET endpoint returning aggregate social sharing metrics for any
-    URL — clicks and shares broken out per network (facebook, twitter, linkedin, pinterest, whatsapp and
-    dozens more), plus reaction counts and totals. Takes a single required url parameter; an optional
-    wd=true flag serves counts for the legacy wd.sharethis.com widget.
+  description: >-
+    Public, unauthenticated GET endpoint returning aggregate social sharing metrics for any URL — clicks
+    and shares broken out per network (facebook, twitter, linkedin, pinterest, whatsapp and dozens more),
+    plus reaction counts and totals. Takes a single required url parameter; an optional wd=true flag serves
+    counts for the legacy wd.sharethis.com widget.
   humanURL: https://sharethis.com/support/customization/social-share-count-api/
   baseURL: https://count-server.sharethis.com/v2.0
   tags:
@@ -70,10 +42,11 @@ apis:
   - type: Documentation
     url: https://sharethis.com/support/customization/social-share-count-api/
 - name: ShareThis MCP Server
-  description: First-party remote Model Context Protocol server letting AI assistants create and manage
-    ShareThis properties, validate domain ownership, configure apps and inspect live app output. JSON-RPC
-    2.0 over POST to the host root, OAuth 2.1 account linking with PKCE, nine published tools with full
-    JSON Schema input and output contracts.
+  description: >-
+    First-party remote Model Context Protocol server letting AI assistants create and manage ShareThis
+    properties, validate domain ownership, configure apps and inspect live app output. JSON-RPC 2.0 over
+    POST to the host root, OAuth 2.1 account linking with PKCE, nine published tools with full JSON Schema
+    input and output contracts.
   humanURL: https://sharethis.com/mcp/
   baseURL: https://mcp.sharethis.com
   tags:
@@ -88,12 +61,141 @@ apis:
     url: mcp/sharethis-tool-crosswalk.yml
   - type: Documentation
     url: https://sharethis.com/mcp/
+- aid: sharethis:sharethis-ai-summary-api
+  name: ShareThis AI Summary API
+  description: >-
+    Generates the "Key Observations" summary for the Sharing Intelligence Overview page from a compact,
+    pre-aggregated metrics payload. The OpenAI key stays server-side.
+  humanURL: https://sharethis.com/platform-api/
+  baseURL: https://platform-api.sharethis.com/v2.0
+  tags:
+  - AI Summary
+  properties:
+  - type: OpenAPI
+    url: openapi/sharethis-ai-summary-api-openapi.yml
+  - type: Documentation
+    url: https://sharethis.com/api-docs/
+  - type: APIReference
+    url: https://sharethis.com/platform-api/
+  - type: Authentication
+    url: authentication/sharethis-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sharethis-problem-types.yml
+  - type: DataModel
+    url: data-model/sharethis-data-model.yml
+- aid: sharethis:sharethis-apps-api
+  name: ShareThis Apps API
+  description: ShareThis apps attached to a property
+  humanURL: https://sharethis.com/platform-api/
+  baseURL: https://platform-api.sharethis.com/v2.0
+  tags:
+  - Apps
+  properties:
+  - type: OpenAPI
+    url: openapi/sharethis-apps-api-openapi.yml
+  - type: Documentation
+    url: https://sharethis.com/api-docs/
+  - type: APIReference
+    url: https://sharethis.com/platform-api/
+  - type: Authentication
+    url: authentication/sharethis-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sharethis-problem-types.yml
+  - type: DataModel
+    url: data-model/sharethis-data-model.yml
+- aid: sharethis:sharethis-audience-api
+  name: ShareThis Audience API
+  description: Audience analytics for the Sharing Intelligence page.
+  humanURL: https://sharethis.com/platform-api/
+  baseURL: https://platform-api.sharethis.com/v2.0
+  tags:
+  - Audience
+  properties:
+  - type: OpenAPI
+    url: openapi/sharethis-audience-api-openapi.yml
+  - type: Documentation
+    url: https://sharethis.com/api-docs/
+  - type: APIReference
+    url: https://sharethis.com/platform-api/
+  - type: Authentication
+    url: authentication/sharethis-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sharethis-problem-types.yml
+  - type: DataModel
+    url: data-model/sharethis-data-model.yml
+- aid: sharethis:sharethis-authentication-api
+  name: ShareThis Authentication API
+  description: Managing user authentication
+  humanURL: https://sharethis.com/platform-api/
+  baseURL: https://platform-api.sharethis.com/v2.0
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/sharethis-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://sharethis.com/api-docs/
+  - type: APIReference
+    url: https://sharethis.com/platform-api/
+  - type: Authentication
+    url: authentication/sharethis-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sharethis-problem-types.yml
+  - type: DataModel
+    url: data-model/sharethis-data-model.yml
+- aid: sharethis:sharethis-oauth-clients-api
+  name: ShareThis OAuth Clients API
+  description: >-
+    Manage machine-to-machine (client_credentials) OAuth credentials for the authenticated account. Create
+    a client to receive a client_id and a client_secret (shown once), then exchange them at /v2.0/mcp/oauth/token
+    using the client_credentials grant.
+  humanURL: https://sharethis.com/platform-api/
+  baseURL: https://platform-api.sharethis.com/v2.0
+  tags:
+  - OAuth Clients
+  properties:
+  - type: OpenAPI
+    url: openapi/sharethis-oauth-clients-api-openapi.yml
+  - type: Documentation
+    url: https://sharethis.com/api-docs/
+  - type: APIReference
+    url: https://sharethis.com/platform-api/
+  - type: Authentication
+    url: authentication/sharethis-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sharethis-problem-types.yml
+  - type: DataModel
+    url: data-model/sharethis-data-model.yml
+- aid: sharethis:sharethis-properties-api
+  name: ShareThis Properties API
+  description: >-
+    Managing properties. A Property represents a single website or domain and is used to configure and
+    manage multiple apps under that domain.
+  humanURL: https://sharethis.com/platform-api/
+  baseURL: https://platform-api.sharethis.com/v2.0
+  tags:
+  - Properties
+  properties:
+  - type: OpenAPI
+    url: openapi/sharethis-properties-api-openapi.yml
+  - type: Documentation
+    url: https://sharethis.com/api-docs/
+  - type: APIReference
+    url: https://sharethis.com/platform-api/
+  - type: Authentication
+    url: authentication/sharethis-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sharethis-problem-types.yml
+  - type: DataModel
+    url: data-model/sharethis-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/sharethis-platform-api-overlay.yaml
 - type: DomainSecurity
   url: security/sharethis-domain-security.yml
 - type: Website
