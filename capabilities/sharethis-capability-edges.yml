@@ -1,0 +1,25 @@
+slug: sharethis
+provider: ShareThis
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Media, Entertainment & Telecom Content
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: OAuth Clients
+  spec_file: sharethis-oauth-clients-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.7
+  evidence: POST /oauth-clients    Create an oauth client (machine-to-machine credentials)
+  reason: Issuance and deletion of OAuth client credentials for API consumers matches Developer Identity
+    & Credential Management. Slight risk that this is better treated as generic IAM plumbing, so not high
+    confidence.

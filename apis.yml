@@ -205,6 +205,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/sharethis-capability-edges.yml
+  name: ShareThis Business Capability Map
 - type: Overlay
   url: overlays/sharethis-platform-api-overlay.yaml
 - type: DomainSecurity
