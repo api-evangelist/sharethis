@@ -11,6 +11,17 @@ description: ShareThis is a Palo Alto, California website-tools and audience-dat
 url: https://raw.githubusercontent.com/api-evangelist/sharethis/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-08-27'
 modified: '2026-08-27'
