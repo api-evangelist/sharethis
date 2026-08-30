@@ -1,0 +1,63 @@
+openapi: 3.2.0
+info:
+  title: ShareThis Platform AI Summary API
+  version: 2.0.0
+  description: Apis to unlock the full potential of your online presence with our collection of powerful website tools. Designed to help you grow, engage, and connect with your audience, these free tools make it easy to enhance sharing, improve performance, and boost visibility across platforms. From social sharing integrations to analytics and engagement features, our website tools give you everything you need to build a stronger digital footprint and create meaningful interactions with your visitors.
+servers:
+- url: https://platform-api.sharethis.com/v2.0
+tags:
+- name: AI Summary
+  description: 'Generates the "Key Observations" summary for the Sharing Intelligence Overview page from a compact, pre-aggregated metrics payload. The OpenAI key stays server-side.
+
+    '
+paths:
+  /generate-ai-summary:
+    post:
+      tags:
+      - AI Summary
+      summary: Generate Key Observations for a property's sharing metrics
+      security:
+      - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - property_id
+              properties:
+                property_id:
+                  type: string
+                  description: The property to summarize. Analytics data is fetched server-side.
+                start_date:
+                  type: string
+                  description: Optional YYYYMMDD start of the selected range. Defaults to last 30 days.
+                end_date:
+                  type: string
+                  description: Optional YYYYMMDD end of the selected range. Defaults to last 30 days.
+      responses:
+        '200':
+          description: Observations generated
+          content:
+            application/json:
+              example:
+                code: AI_SUMMARY_GENERATED
+                data:
+                  observations:
+                  - signal: Share Momentum
+                    what_we_see: Shares rose 21% versus the prior period.
+        '400':
+          description: INVALID_PARAMS
+        '401':
+          description: Authentication required
+        '502':
+          description: AI_SUMMARY_FAILED (model returned unusable output, or a non-retryable upstream error)
+        '503':
+          description: AI_SUMMARY_UNAVAILABLE (key not configured, or a transient upstream fault — 429/5xx/network/timeout — safe to retry)
+components:
+  securitySchemes:
+    BearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

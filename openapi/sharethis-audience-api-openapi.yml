@@ -1,0 +1,57 @@
+openapi: 3.2.0
+info:
+  title: ShareThis Platform Audience API
+  version: 2.0.0
+  description: Apis to unlock the full potential of your online presence with our collection of powerful website tools. Designed to help you grow, engage, and connect with your audience, these free tools make it easy to enhance sharing, improve performance, and boost visibility across platforms. From social sharing integrations to analytics and engagement features, our website tools give you everything you need to build a stronger digital footprint and create meaningful interactions with your visitors.
+servers:
+- url: https://platform-api.sharethis.com/v2.0
+tags:
+- name: Audience
+  description: Audience analytics for the Sharing Intelligence page.
+paths:
+  /audience-pageviews:
+    post:
+      tags:
+      - Audience
+      summary: Total pageviews for a property over the selected range (+ prior window)
+      security:
+      - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - property_id
+              properties:
+                property_id:
+                  type: string
+                start_date:
+                  type: string
+                  description: Optional YYYYMMDD; defaults to last 30 days.
+                end_date:
+                  type: string
+                  description: Optional YYYYMMDD; defaults to last 30 days.
+      responses:
+        '200':
+          description: Pageview totals
+          content:
+            application/json:
+              example:
+                code: AUDIENCE_PAGEVIEWS
+                data:
+                  total: 64710
+                  prev_total: 59860
+        '401':
+          description: Authentication required
+        '404':
+          description: PROPERTY_NOT_FOUND
+        '502':
+          description: AUDIENCE_PAGEVIEWS_FAILED
+components:
+  securitySchemes:
+    BearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

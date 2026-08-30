@@ -1,0 +1,628 @@
+openapi: 3.2.0
+info:
+  title: ShareThis Platform Apps API
+  version: 2.0.0
+  description: Apis to unlock the full potential of your online presence with our collection of powerful website tools. Designed to help you grow, engage, and connect with your audience, these free tools make it easy to enhance sharing, improve performance, and boost visibility across platforms. From social sharing integrations to analytics and engagement features, our website tools give you everything you need to build a stronger digital footprint and create meaningful interactions with your visitors.
+servers:
+- url: https://platform-api.sharethis.com/v2.0
+tags:
+- name: Apps
+  description: ShareThis apps attached to a property
+paths:
+  /properties/{property_id}/apps:
+    post:
+      tags:
+      - Apps
+      summary: Create or update a property app
+      security:
+      - BearerToken: []
+      parameters:
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        description: Bearer access token
+        schema:
+          type: string
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      - in: header
+        name: Content-Type
+        required: true
+        schema:
+          type: string
+          example: application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - config
+              properties:
+                config:
+                  oneOf:
+                  - $ref: '#/components/schemas/InlineShareButtonConfig'
+                  - $ref: '#/components/schemas/StickyShareButtonsConfig'
+                  - $ref: '#/components/schemas/InlineFollowButtonsConfig'
+                  - $ref: '#/components/schemas/InlineReactionButtonsConfig'
+      responses:
+        '200':
+          description: App configuration saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+              example:
+                code: APP_UPDATED
+                data:
+                  property_id: 64c8c9e21a2b4c0012345678
+                  app_id: inline-share-buttons
+        '400':
+          description: Invalid app id or configuration
+          content:
+            application/json:
+              examples:
+                invalid_app_id:
+                  value:
+                    code: INVALID_APP_ID
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              example:
+                code: AUTH_REQUIRED
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              example:
+                code: PROPERTY_NOT_FOUND
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                code: INTERNAL_SERVER_ERROR
+  /properties/{property_id}/apps/:
+    get:
+      summary: List apps configured for a property
+      description: Returns all enabled app IDs associated with the specified property.
+      operationId: listPropertyApps
+      tags:
+      - Apps
+      security:
+      - BearerToken: []
+      parameters:
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        description: Bearer access token
+        schema:
+          type: string
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      - in: header
+        name: Content-Type
+        required: true
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: Apps found for property
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+              example:
+                code: APPS_FOUND
+                data:
+                  apps:
+                  - app_id: inline-share-buttons
+                  - app_id: sticky-share-buttons
+        '401':
+          description: Authentication required
+        '404':
+          description: Property not found
+        '500':
+          description: Internal server error
+  /properties/{property_id}/apps/{app_id}:
+    get:
+      summary: Get configuration for a specific app on a property
+      description: Returns the configuration object for a specific app associated with a property.
+      operationId: getPropertyApp
+      tags:
+      - Apps
+      security:
+      - BearerToken: []
+      parameters:
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: app_id
+        in: path
+        required: true
+        description: Unique identifier of the app
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        description: Bearer access token
+        schema:
+          type: string
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      - in: header
+        name: Content-Type
+        required: true
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: App configuration found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+              example:
+                code: APP_FOUND
+                data:
+                  app:
+                    enabled: true
+        '401':
+          description: Authentication required
+        '404':
+          description: Property or app not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Remove an app from a property
+      description: Deletes the specified app configuration from a property.
+      operationId: deletePropertyApp
+      tags:
+      - Apps
+      security:
+      - BearerToken: []
+      parameters:
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: app_id
+        in: path
+        required: true
+        description: Unique identifier of the app
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        description: Bearer access token
+        schema:
+          type: string
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      - in: header
+        name: Content-Type
+        required: true
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: App successfully removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+              example:
+                code: APP_DELETED
+                data:
+                  app_id: inline-share-buttons
+        '401':
+          description: Authentication required
+        '404':
+          description: Property or app not found
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    Reactions:
+      type: string
+      enum:
+      - slight_smile
+      - heart_eyes
+      - laughing
+      - astonished
+      - sob
+      - rage
+    FollowNetworks:
+      type: string
+      enum:
+      - airbnb
+      - amazon
+      - bandcamp
+      - behance
+      - bitbucket
+      - blogger
+      - bluesky
+      - deviantart
+      - digg
+      - discord
+      - dribbble
+      - etsy
+      - facebook
+      - flickr
+      - flipboard
+      - foursquare
+      - gettr
+      - github
+      - gitlab
+      - goodreads
+      - googlemaps
+      - googlescholar
+      - houzz
+      - instagram
+      - linkedin
+      - mastodon
+      - medium
+      - meetup
+      - messenger
+      - mix
+      - odnoklassniki
+      - parler
+      - patreon
+      - pinterest
+      - quora
+      - reddit
+      - shares
+      - slideshare
+      - snapchat
+      - soundcloud
+      - spotify
+      - stackoverflow
+      - strava
+      - telegram
+      - threads
+      - tiktok
+      - trello
+      - tripadvisor
+      - truthsocial
+      - tumblr
+      - twitch
+      - twitter
+      - vimeo
+      - vk
+      - wechat
+      - weibo
+      - whatsapp
+      - xing
+      - yelp
+      - youtube
+      - zillow
+      - zomato
+    ShareNetworks:
+      type: string
+      enum:
+      - facebook
+      - blogger
+      - bluesky
+      - buffer
+      - chatgpt
+      - claude
+      - copilot
+      - copy
+      - diaspora
+      - digg
+      - diigo
+      - douban
+      - email
+      - evernote
+      - fark
+      - flipboard
+      - gab
+      - gemini
+      - getpocket
+      - gmail
+      - googlebookmarks
+      - grok
+      - hackernews
+      - houzz
+      - instapaper
+      - kakao
+      - kindleit
+      - line
+      - linkedin
+      - livejournal
+      - mastodon
+      - mailru
+      - meneame
+      - messenger
+      - microsoftteams
+      - naver
+      - nextdoor
+      - odnoklassniki
+      - outlook
+      - perplexity
+      - pinboard
+      - pinterest
+      - plurk
+      - print
+      - qzone
+      - reddit
+      - refind
+      - renren
+      - sharethis
+      - sms
+      - telegram
+      - tencentqq
+      - threema
+      - trello
+      - tumblr
+      - twitter
+      - vk
+      - viber
+      - wechat
+      - weibo
+      - whatsapp
+      - wordpress
+      - xing
+      - yahoomail
+      - yummly
+    StickyShareButtonsConfig:
+      type: object
+      properties:
+        app_id:
+          type: string
+          enum:
+          - sticky-share-buttons
+        enabled:
+          type: boolean
+          default: true
+        alignment:
+          type: string
+          default: left
+        background_color:
+          type: string
+          default: '#B581A3'
+        color:
+          type: string
+          default: social
+        has_spacing:
+          type: boolean
+          default: false
+        hide_desktop:
+          type: boolean
+          default: false
+        text_color:
+          type: string
+          default: '#fff'
+        labels:
+          type: string
+          default: counts
+        language:
+          type: string
+          default: en
+        min_count:
+          type: number
+          default: 0
+        mobile_breakpoint:
+          type: number
+          default: 0
+        networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShareNetworks'
+        padding:
+          type: number
+          default: 12
+        radius:
+          type: number
+          default: 0
+        show_mobile:
+          type: boolean
+          default: false
+        show_mobile_buttons:
+          type: boolean
+          default: true
+        show_toggle:
+          type: boolean
+          default: true
+        show_total:
+          type: boolean
+          default: false
+        size:
+          type: number
+          default: 48
+        slide_in:
+          type: boolean
+          default: true
+        spacing:
+          type: number
+          default: 0
+        subject:
+          type: string
+        top:
+          type: number
+          default: 100
+        use_native_counts:
+          type: boolean
+          default: true
+        preview:
+          type: boolean
+          default: false
+    InlineFollowButtonsConfig:
+      type: object
+      properties:
+        app_id:
+          type: string
+          enum:
+          - inline-follow-buttons
+        enabled:
+          type: boolean
+          default: true
+        action:
+          type: string
+          default: 'Follow us:'
+        action_enable:
+          type: boolean
+          default: true
+        action_pos:
+          type: string
+          default: top
+        alignment:
+          type: string
+          default: left
+        color:
+          type: string
+          default: social
+        fade_in:
+          type: boolean
+          default: true
+        language:
+          type: string
+          default: en
+        networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/FollowNetworks'
+        padding:
+          type: number
+          default: 10
+        profiles:
+          type: object
+          default: {}
+        radius:
+          type: number
+          default: 0
+        size:
+          type: number
+          default: 40
+        spacing:
+          type: number
+          default: 8
+        preview:
+          type: boolean
+          default: false
+    InlineReactionButtonsConfig:
+      type: object
+      properties:
+        app_id:
+          type: string
+          enum:
+          - inline-reaction-buttons
+        enabled:
+          type: boolean
+          default: true
+        fade_in:
+          type: boolean
+          default: true
+        min_count:
+          type: number
+          default: 0
+        reactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reactions'
+        padding:
+          type: number
+          default: 10
+        language:
+          type: string
+          default: en
+        size:
+          type: number
+          default: 48
+        url:
+          type: string
+    InlineShareButtonConfig:
+      type: object
+      properties:
+        app_id:
+          type: string
+          enum:
+          - inline-share-buttons
+        enabled:
+          type: boolean
+          default: true
+        alignment:
+          type: string
+          default: left
+        background_color:
+          type: string
+          default: '#B581A3'
+        color:
+          type: string
+          default: social
+        fade_in:
+          type: boolean
+          default: true
+        font_size:
+          type: number
+          default: 12
+        text_color:
+          type: string
+          default: '#fff'
+        language:
+          type: string
+          default: en
+        min_count:
+          type: number
+          default: 0
+        networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShareNetworks'
+        padding:
+          type: number
+          default: 10
+        radius:
+          type: number
+          default: 0
+        show_mobile_buttons:
+          type: boolean
+          default: true
+        size:
+          type: number
+          default: 40
+        spacing:
+          type: number
+          default: 8
+        subject:
+          type: string
+        use_native_counts:
+          type: boolean
+          default: true
+        preview:
+          type: boolean
+          default: false
+    Response:
+      type: object
+      required:
+      - code
+      properties:
+        code:
+          type: string
+          example: PROPERTY_CREATED
+          description: Response code
+        data:
+          type:
+          - object
+          - 'null'
+  securitySchemes:
+    BearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

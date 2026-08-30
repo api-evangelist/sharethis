@@ -1,0 +1,274 @@
+openapi: 3.2.0
+info:
+  title: ShareThis Platform Properties API
+  version: 2.0.0
+  description: Apis to unlock the full potential of your online presence with our collection of powerful website tools. Designed to help you grow, engage, and connect with your audience, these free tools make it easy to enhance sharing, improve performance, and boost visibility across platforms. From social sharing integrations to analytics and engagement features, our website tools give you everything you need to build a stronger digital footprint and create meaningful interactions with your visitors.
+servers:
+- url: https://platform-api.sharethis.com/v2.0
+tags:
+- name: Properties
+  description: Managing properties. A Property represents a single website or domain and is used to configure and manage multiple apps under that domain.
+paths:
+  /properties/:
+    post:
+      tags:
+      - Properties
+      summary: Create property
+      description: 'A Property represents a single website or domain and is used to configure and manage multiple apps under that domain. Creates a new property for the authenticated user. A user may create a maximum of **10 properties**.
+
+        '
+      security:
+      - BearerToken: []
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        description: Bearer access token
+        schema:
+          type: string
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      - in: header
+        name: Content-Type
+        required: true
+        schema:
+          type: string
+          example: application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - domain
+              properties:
+                domain:
+                  type: string
+                  example: example.com
+      responses:
+        '200':
+          description: Property successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+              example:
+                code: PROPERTY_CREATED
+                data:
+                  property: 64c8c9e21a2b4c0012345678
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              example:
+                code: DOMAIN_REQUIRED
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              example:
+                code: AUTH_REQUIRED
+        '403':
+          description: Property limit exceeded
+          content:
+            application/json:
+              example:
+                code: PROPERTY_LIMIT_EXCEEDED
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                code: INTERNAL_SERVER_ERROR
+  /properties:
+    get:
+      summary: Get properties for authenticated user
+      description: Returns a list of properties associated with the authenticated user's email.
+      tags:
+      - Properties
+      security:
+      - BearerToken: []
+      responses:
+        '200':
+          description: Properties found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+              example:
+                code: PROPERTIES_FOUND
+                data:
+                - property_id: asdfasdfasdfasdfd
+                  domain: sharethis.com
+                  created_at: '2024-01-15T18:42:11.123Z'
+                - property_id: asdfasdfasdfasdfdasdf
+                  domain: predactiv.com
+                  created_at: '2024-01-15T18:42:11.123Z'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              example:
+                code: AUTH_REQUIRED
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                code: INTERNAL_SERVER_ERROR
+  /properties/{property_id}:
+    get:
+      tags:
+      - Properties
+      summary: Get property by ID
+      security:
+      - BearerToken: []
+      parameters:
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        description: Bearer access token
+        schema:
+          type: string
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      - in: header
+        name: Content-Type
+        required: true
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: Property found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+              example:
+                code: PROPERTY_FOUND
+                data:
+                  property:
+                    domain: example.com
+                    slug: example-com
+                    verified: false
+                    locked: false
+                    created_at: '2024-01-15T18:42:11.123Z'
+                    updated_at: '2024-01-15T18:42:11.123Z'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              example:
+                code: AUTH_REQUIRED
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              example:
+                code: PROPERTY_NOT_FOUND
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                code: INTERNAL_SERVER_ERROR
+  /properties/{property_id}/validate:
+    post:
+      tags:
+      - Properties
+      summary: Validate property ownership via domain file
+      description: "Verifies ownership of a property domain by checking for a validation file\nhosted on the domain.\n\n### How verification works\n1. The API retrieves the property by ID.\n2. If the property is already verified, the request returns immediately.\n3. The API requests the following URL:\n\n   `http://{domain}/sharethis-property.txt`\n\n4. The file **must contain only the property ID** as plain text.\n5. If the ID matches, the property is marked as verified.\n\n### File requirements\n- Filename: `sharethis-property.txt`\n- Location: Root of the domain\n- Content: Exact property ID (no whitespace, no extra text)\n\n### Common failure reasons\n- File does not exist\n- File contents do not match property ID\n- Property does not exist\n- Property is already verified\n"
+      security:
+      - BearerToken: []
+      parameters:
+      - name: property_id
+        in: path
+        required: true
+        description: The unique identifier of the property to validate
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        description: Bearer access token
+        schema:
+          type: string
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      - in: header
+        name: Content-Type
+        required: true
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: Property successfully verified
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+              example:
+                code: PROPERTY_VERIFIED
+                data:
+                  property_id: 64f2c9a12ab34
+                  domain: example.com
+        '400':
+          description: Validation failed due to missing or invalid file
+          content:
+            application/json:
+              examples:
+                file_missing:
+                  value:
+                    code: PROPERTY_UNVERIFIED_FILE_MISSING
+                id_mismatch:
+                  value:
+                    code: PROPERTY_ID_MISMATCH
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              example:
+                code: AUTH_REQUIRED
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              example:
+                code: PROPERTY_NOT_FOUND
+        '409':
+          description: Property already verified
+          content:
+            application/json:
+              example:
+                code: PROPERTY_ALREADY_VERIFIED
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                code: INTERNAL_SERVER_ERROR
+components:
+  schemas:
+    Response:
+      type: object
+      required:
+      - code
+      properties:
+        code:
+          type: string
+          example: PROPERTY_CREATED
+          description: Response code
+        data:
+          type:
+          - object
+          - 'null'
+  securitySchemes:
+    BearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

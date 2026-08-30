@@ -1,0 +1,127 @@
+openapi: 3.2.0
+info:
+  title: ShareThis Platform OAuth Clients API
+  version: 2.0.0
+  description: Apis to unlock the full potential of your online presence with our collection of powerful website tools. Designed to help you grow, engage, and connect with your audience, these free tools make it easy to enhance sharing, improve performance, and boost visibility across platforms. From social sharing integrations to analytics and engagement features, our website tools give you everything you need to build a stronger digital footprint and create meaningful interactions with your visitors.
+servers:
+- url: https://platform-api.sharethis.com/v2.0
+tags:
+- name: OAuth Clients
+  description: 'Manage machine-to-machine (client_credentials) OAuth credentials for the authenticated account. Create a client to receive a client_id and a client_secret (shown once), then exchange them at /v2.0/mcp/oauth/token using the client_credentials grant.
+
+    '
+paths:
+  /oauth-clients:
+    post:
+      tags:
+      - OAuth Clients
+      summary: Create an oauth client (machine-to-machine credentials)
+      description: 'Generates a new client_id and client_secret for the authenticated account. The plaintext client_secret is returned exactly once and is not retrievable afterward. A maximum of 25 active clients per account.
+
+        '
+      security:
+      - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  example: my-integration
+                client_type:
+                  type: string
+                  enum:
+                  - confidential
+                  - public
+                  default: confidential
+      responses:
+        '200':
+          description: OAuth client created
+          content:
+            application/json:
+              example:
+                code: OAUTH_CLIENT_CREATED
+                data:
+                  client_id: STPABC123DEF456GH
+                  name: my-integration
+                  client_type: confidential
+                  expires_at: null
+                  client_secret: 3f9c...a12b
+        '400':
+          description: Invalid input (e.g. NAME_REQUIRED)
+        '401':
+          description: Authentication required
+        '403':
+          description: OAUTH_CLIENT_LIMIT_EXCEEDED
+        '500':
+          description: Internal server error
+    get:
+      tags:
+      - OAuth Clients
+      summary: List the authenticated account's oauth clients
+      description: Secrets are returned masked, never in plaintext.
+      security:
+      - BearerToken: []
+      parameters:
+      - in: query
+        name: client_type
+        required: false
+        schema:
+          type: string
+          enum:
+          - confidential
+          - public
+      responses:
+        '200':
+          description: List of oauth clients
+          content:
+            application/json:
+              example:
+                code: OAUTH_CLIENTS_LISTED
+                data:
+                  clients:
+                  - client_id: STPABC123DEF456GH
+                    name: my-integration
+                    client_type: confidential
+                    client_secret: 3f...a12b
+        '401':
+          description: Authentication required
+        '500':
+          description: Internal server error
+  /oauth-clients/{client_id}:
+    delete:
+      tags:
+      - OAuth Clients
+      summary: Delete an oauth client owned by the authenticated account
+      security:
+      - BearerToken: []
+      parameters:
+      - in: path
+        name: client_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OAuth client deleted
+          content:
+            application/json:
+              example:
+                code: OAUTH_CLIENT_DELETED
+        '401':
+          description: Authentication required
+        '404':
+          description: OAUTH_CLIENT_NOT_FOUND
+        '500':
+          description: Internal server error
+components:
+  securitySchemes:
+    BearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
