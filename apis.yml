@@ -35,6 +35,16 @@ tags:
 - Analytics
 - Consent Management
 - Publishing
+- MCP
+tags_raw:
+- Company
+- Social Sharing
+- Website Tools
+- Audience Data
+- Advertising Technology
+- Analytics
+- Consent Management
+- Publishing
 - Model Context Protocol
 apis:
 - name: ShareThis Social Share Count API
@@ -61,6 +71,11 @@ apis:
   humanURL: https://sharethis.com/mcp/
   baseURL: https://mcp.sharethis.com
   tags:
+  - MCP
+  - AI Agents
+  - Properties
+  - Application
+  tags_raw:
   - Model Context Protocol
   - AI Agents
   - Properties
@@ -100,6 +115,8 @@ apis:
   humanURL: https://sharethis.com/platform-api/
   baseURL: https://platform-api.sharethis.com/v2.0
   tags:
+  - Application
+  tags_raw:
   - Apps
   properties:
   - type: OpenAPI
