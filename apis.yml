@@ -74,6 +74,10 @@ apis:
   tags:
   - Share Counts
   - Analytics
+  - Public APIs
+  tags_raw:
+  - Share Counts
+  - Analytics
   - Public API
   properties:
   - type: Documentation
@@ -153,6 +157,8 @@ apis:
   humanURL: https://sharethis.com/platform-api/
   baseURL: https://platform-api.sharethis.com/v2.0
   tags:
+  - Audiences
+  tags_raw:
   - Audience
   properties:
   - type: OpenAPI
