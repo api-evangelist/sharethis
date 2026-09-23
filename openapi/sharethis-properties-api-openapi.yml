@@ -14,9 +14,7 @@ paths:
       tags:
       - Properties
       summary: Create property
-      description: 'A Property represents a single website or domain and is used to configure and manage multiple apps under that domain. Creates a new property for the authenticated user. A user may create a maximum of **10 properties**.
-
-        '
+      description: A Property represents a single website or domain and is used to configure and manage multiple apps under that domain. Creates a new property for the authenticated user. A user may create a maximum of **10 properties**.
       security:
       - BearerToken: []
       parameters:
@@ -80,6 +78,8 @@ paths:
             application/json:
               example:
                 code: INTERNAL_SERVER_ERROR
+      operationId: postProperties
+      x-operation-id-source: derived
   /properties:
     get:
       summary: Get properties for authenticated user
@@ -116,6 +116,8 @@ paths:
             application/json:
               example:
                 code: INTERNAL_SERVER_ERROR
+      operationId: getProperties
+      x-operation-id-source: derived
   /properties/{property_id}:
     get:
       tags:
@@ -177,12 +179,53 @@ paths:
             application/json:
               example:
                 code: INTERNAL_SERVER_ERROR
+      operationId: getPropertiesByPropertyId
+      x-operation-id-source: derived
   /properties/{property_id}/validate:
     post:
       tags:
       - Properties
       summary: Validate property ownership via domain file
-      description: "Verifies ownership of a property domain by checking for a validation file\nhosted on the domain.\n\n### How verification works\n1. The API retrieves the property by ID.\n2. If the property is already verified, the request returns immediately.\n3. The API requests the following URL:\n\n   `http://{domain}/sharethis-property.txt`\n\n4. The file **must contain only the property ID** as plain text.\n5. If the ID matches, the property is marked as verified.\n\n### File requirements\n- Filename: `sharethis-property.txt`\n- Location: Root of the domain\n- Content: Exact property ID (no whitespace, no extra text)\n\n### Common failure reasons\n- File does not exist\n- File contents do not match property ID\n- Property does not exist\n- Property is already verified\n"
+      description: 'Verifies ownership of a property domain by checking for a validation file
+
+        hosted on the domain.
+
+
+        ### How verification works
+
+        1. The API retrieves the property by ID.
+
+        2. If the property is already verified, the request returns immediately.
+
+        3. The API requests the following URL:
+
+
+        `http://{domain}/sharethis-property.txt`
+
+
+        4. The file **must contain only the property ID** as plain text.
+
+        5. If the ID matches, the property is marked as verified.
+
+
+        ### File requirements
+
+        - Filename: `sharethis-property.txt`
+
+        - Location: Root of the domain
+
+        - Content: Exact property ID (no whitespace, no extra text)
+
+
+        ### Common failure reasons
+
+        - File does not exist
+
+        - File contents do not match property ID
+
+        - Property does not exist
+
+        - Property is already verified'
       security:
       - BearerToken: []
       parameters:
@@ -252,6 +295,8 @@ paths:
             application/json:
               example:
                 code: INTERNAL_SERVER_ERROR
+      operationId: postPropertiesByPropertyIdValidate
+      x-operation-id-source: derived
 components:
   schemas:
     Response:

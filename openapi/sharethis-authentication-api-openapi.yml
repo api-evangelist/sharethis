@@ -19,9 +19,7 @@ paths:
         To register and get new account, please visit https://platform.sharethis.com
 
 
-        This endpoint is **stateless** and does not use refresh tokens.
-
-        '
+        This endpoint is **stateless** and does not use refresh tokens.'
       parameters:
       - in: header
         name: Content-Type
@@ -78,6 +76,8 @@ paths:
             application/json:
               example:
                 code: INTERNAL_SERVER_ERROR
+      operationId: postAuthLogin
+      x-operation-id-source: derived
 components:
   schemas:
     Response:

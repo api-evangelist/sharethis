@@ -1,0 +1,31 @@
+# Front Door AI Index — sharethis — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: sharethis
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: sharethis.com
+  final_host: sharethis.com
+  ownership: own
+  owner: sharethis
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 15
+  host_score: 15
+  density: 24.31
+  words: 617
+  tiers:
+    agentic: 5
+    core: 4
+    model: 6
+  ambiguous: 5
+  top_terms:
+    ChatGPT: 5
+    AI: 4
+    MCP: 4
+    intelligence: 3
+    agent: 2
+    AI agent: 1
+    Claude: 1

@@ -49,6 +49,8 @@ paths:
           description: PROPERTY_NOT_FOUND
         '502':
           description: AUDIENCE_PAGEVIEWS_FAILED
+      operationId: postAudiencePageviews
+      x-operation-id-source: derived
 components:
   securitySchemes:
     BearerToken:

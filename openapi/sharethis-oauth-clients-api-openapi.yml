@@ -7,18 +7,14 @@ servers:
 - url: https://platform-api.sharethis.com/v2.0
 tags:
 - name: OAuth Clients
-  description: 'Manage machine-to-machine (client_credentials) OAuth credentials for the authenticated account. Create a client to receive a client_id and a client_secret (shown once), then exchange them at /v2.0/mcp/oauth/token using the client_credentials grant.
-
-    '
+  description: Manage machine-to-machine (client_credentials) OAuth credentials for the authenticated account. Create a client to receive a client_id and a client_secret (shown once), then exchange them at /v2.0/mcp/oauth/token using the client_credentials grant.
 paths:
   /oauth-clients:
     post:
       tags:
       - OAuth Clients
       summary: Create an oauth client (machine-to-machine credentials)
-      description: 'Generates a new client_id and client_secret for the authenticated account. The plaintext client_secret is returned exactly once and is not retrievable afterward. A maximum of 25 active clients per account.
-
-        '
+      description: Generates a new client_id and client_secret for the authenticated account. The plaintext client_secret is returned exactly once and is not retrievable afterward. A maximum of 25 active clients per account.
       security:
       - BearerToken: []
       requestBody:
@@ -60,6 +56,8 @@ paths:
           description: OAUTH_CLIENT_LIMIT_EXCEEDED
         '500':
           description: Internal server error
+      operationId: postOauthClients
+      x-operation-id-source: derived
     get:
       tags:
       - OAuth Clients
@@ -93,6 +91,8 @@ paths:
           description: Authentication required
         '500':
           description: Internal server error
+      operationId: getOauthClients
+      x-operation-id-source: derived
   /oauth-clients/{client_id}:
     delete:
       tags:
@@ -119,6 +119,8 @@ paths:
           description: OAUTH_CLIENT_NOT_FOUND
         '500':
           description: Internal server error
+      operationId: deleteOauthClientsByClientId
+      x-operation-id-source: derived
 components:
   securitySchemes:
     BearerToken:

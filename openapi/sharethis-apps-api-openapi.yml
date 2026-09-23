@@ -88,6 +88,8 @@ paths:
             application/json:
               example:
                 code: INTERNAL_SERVER_ERROR
+      operationId: postPropertiesByPropertyIdApps
+      x-operation-id-source: derived
   /properties/{property_id}/apps/:
     get:
       summary: List apps configured for a property
@@ -239,148 +241,6 @@ paths:
           description: Internal server error
 components:
   schemas:
-    Reactions:
-      type: string
-      enum:
-      - slight_smile
-      - heart_eyes
-      - laughing
-      - astonished
-      - sob
-      - rage
-    FollowNetworks:
-      type: string
-      enum:
-      - airbnb
-      - amazon
-      - bandcamp
-      - behance
-      - bitbucket
-      - blogger
-      - bluesky
-      - deviantart
-      - digg
-      - discord
-      - dribbble
-      - etsy
-      - facebook
-      - flickr
-      - flipboard
-      - foursquare
-      - gettr
-      - github
-      - gitlab
-      - goodreads
-      - googlemaps
-      - googlescholar
-      - houzz
-      - instagram
-      - linkedin
-      - mastodon
-      - medium
-      - meetup
-      - messenger
-      - mix
-      - odnoklassniki
-      - parler
-      - patreon
-      - pinterest
-      - quora
-      - reddit
-      - shares
-      - slideshare
-      - snapchat
-      - soundcloud
-      - spotify
-      - stackoverflow
-      - strava
-      - telegram
-      - threads
-      - tiktok
-      - trello
-      - tripadvisor
-      - truthsocial
-      - tumblr
-      - twitch
-      - twitter
-      - vimeo
-      - vk
-      - wechat
-      - weibo
-      - whatsapp
-      - xing
-      - yelp
-      - youtube
-      - zillow
-      - zomato
-    ShareNetworks:
-      type: string
-      enum:
-      - facebook
-      - blogger
-      - bluesky
-      - buffer
-      - chatgpt
-      - claude
-      - copilot
-      - copy
-      - diaspora
-      - digg
-      - diigo
-      - douban
-      - email
-      - evernote
-      - fark
-      - flipboard
-      - gab
-      - gemini
-      - getpocket
-      - gmail
-      - googlebookmarks
-      - grok
-      - hackernews
-      - houzz
-      - instapaper
-      - kakao
-      - kindleit
-      - line
-      - linkedin
-      - livejournal
-      - mastodon
-      - mailru
-      - meneame
-      - messenger
-      - microsoftteams
-      - naver
-      - nextdoor
-      - odnoklassniki
-      - outlook
-      - perplexity
-      - pinboard
-      - pinterest
-      - plurk
-      - print
-      - qzone
-      - reddit
-      - refind
-      - renren
-      - sharethis
-      - sms
-      - telegram
-      - tencentqq
-      - threema
-      - trello
-      - tumblr
-      - twitter
-      - vk
-      - viber
-      - wechat
-      - weibo
-      - whatsapp
-      - wordpress
-      - xing
-      - yahoomail
-      - yummly
     StickyShareButtonsConfig:
       type: object
       properties:
@@ -516,6 +376,96 @@ components:
         preview:
           type: boolean
           default: false
+    Response:
+      type: object
+      required:
+      - code
+      properties:
+        code:
+          type: string
+          example: PROPERTY_CREATED
+          description: Response code
+        data:
+          type:
+          - object
+          - 'null'
+    ShareNetworks:
+      type: string
+      enum:
+      - facebook
+      - blogger
+      - bluesky
+      - buffer
+      - chatgpt
+      - claude
+      - copilot
+      - copy
+      - diaspora
+      - digg
+      - diigo
+      - douban
+      - email
+      - evernote
+      - fark
+      - flipboard
+      - gab
+      - gemini
+      - getpocket
+      - gmail
+      - googlebookmarks
+      - grok
+      - hackernews
+      - houzz
+      - instapaper
+      - kakao
+      - kindleit
+      - line
+      - linkedin
+      - livejournal
+      - mastodon
+      - mailru
+      - meneame
+      - messenger
+      - microsoftteams
+      - naver
+      - nextdoor
+      - odnoklassniki
+      - outlook
+      - perplexity
+      - pinboard
+      - pinterest
+      - plurk
+      - print
+      - qzone
+      - reddit
+      - refind
+      - renren
+      - sharethis
+      - sms
+      - telegram
+      - tencentqq
+      - threema
+      - trello
+      - tumblr
+      - twitter
+      - vk
+      - viber
+      - wechat
+      - weibo
+      - whatsapp
+      - wordpress
+      - xing
+      - yahoomail
+      - yummly
+    Reactions:
+      type: string
+      enum:
+      - slight_smile
+      - heart_eyes
+      - laughing
+      - astonished
+      - sob
+      - rage
     InlineReactionButtonsConfig:
       type: object
       properties:
@@ -608,19 +558,71 @@ components:
         preview:
           type: boolean
           default: false
-    Response:
-      type: object
-      required:
-      - code
-      properties:
-        code:
-          type: string
-          example: PROPERTY_CREATED
-          description: Response code
-        data:
-          type:
-          - object
-          - 'null'
+    FollowNetworks:
+      type: string
+      enum:
+      - airbnb
+      - amazon
+      - bandcamp
+      - behance
+      - bitbucket
+      - blogger
+      - bluesky
+      - deviantart
+      - digg
+      - discord
+      - dribbble
+      - etsy
+      - facebook
+      - flickr
+      - flipboard
+      - foursquare
+      - gettr
+      - github
+      - gitlab
+      - goodreads
+      - googlemaps
+      - googlescholar
+      - houzz
+      - instagram
+      - linkedin
+      - mastodon
+      - medium
+      - meetup
+      - messenger
+      - mix
+      - odnoklassniki
+      - parler
+      - patreon
+      - pinterest
+      - quora
+      - reddit
+      - shares
+      - slideshare
+      - snapchat
+      - soundcloud
+      - spotify
+      - stackoverflow
+      - strava
+      - telegram
+      - threads
+      - tiktok
+      - trello
+      - tripadvisor
+      - truthsocial
+      - tumblr
+      - twitch
+      - twitter
+      - vimeo
+      - vk
+      - wechat
+      - weibo
+      - whatsapp
+      - xing
+      - yelp
+      - youtube
+      - zillow
+      - zomato
   securitySchemes:
     BearerToken:
       type: http

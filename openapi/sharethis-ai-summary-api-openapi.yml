@@ -7,9 +7,7 @@ servers:
 - url: https://platform-api.sharethis.com/v2.0
 tags:
 - name: AI Summary
-  description: 'Generates the "Key Observations" summary for the Sharing Intelligence Overview page from a compact, pre-aggregated metrics payload. The OpenAI key stays server-side.
-
-    '
+  description: Generates the "Key Observations" summary for the Sharing Intelligence Overview page from a compact, pre-aggregated metrics payload. The OpenAI key stays server-side.
 paths:
   /generate-ai-summary:
     post:
@@ -55,6 +53,8 @@ paths:
           description: AI_SUMMARY_FAILED (model returned unusable output, or a non-retryable upstream error)
         '503':
           description: AI_SUMMARY_UNAVAILABLE (key not configured, or a transient upstream fault — 429/5xx/network/timeout — safe to retry)
+      operationId: postGenerateAiSummary
+      x-operation-id-source: derived
 components:
   securitySchemes:
     BearerToken:

@@ -1,0 +1,30 @@
+{
+  "provider": "sharethis",
+  "sources": [
+    "_original/sharethis-platform-api.json"
+  ],
+  "outputs": [
+    "sharethis-ai-summary-api-openapi.yml",
+    "sharethis-apps-api-openapi.yml",
+    "sharethis-audience-api-openapi.yml",
+    "sharethis-authentication-api-openapi.yml",
+    "sharethis-oauth-clients-api-openapi.yml",
+    "sharethis-properties-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "sharethis-platform-api.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "sharethis-ai-summary-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sharethis-apps-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sharethis-audience-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sharethis-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sharethis-oauth-clients-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sharethis-properties-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
