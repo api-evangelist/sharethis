@@ -241,80 +241,71 @@ paths:
           description: Internal server error
 components:
   schemas:
-    InlineShareButtonConfig:
-      type: object
-      properties:
-        app_id:
-          type: string
-          enum:
-          - inline-share-buttons
-        enabled:
-          type: boolean
-          default: true
-        alignment:
-          type: string
-          default: left
-        background_color:
-          type: string
-          default: '#B581A3'
-        color:
-          type: string
-          default: social
-        fade_in:
-          type: boolean
-          default: true
-        font_size:
-          type: number
-          default: 12
-        text_color:
-          type: string
-          default: '#fff'
-        language:
-          type: string
-          default: en
-        min_count:
-          type: number
-          default: 0
-        networks:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShareNetworks'
-        padding:
-          type: number
-          default: 10
-        radius:
-          type: number
-          default: 0
-        show_mobile_buttons:
-          type: boolean
-          default: true
-        size:
-          type: number
-          default: 40
-        spacing:
-          type: number
-          default: 8
-        subject:
-          type: string
-        use_native_counts:
-          type: boolean
-          default: true
-        preview:
-          type: boolean
-          default: false
-    Response:
-      type: object
-      required:
-      - code
-      properties:
-        code:
-          type: string
-          example: PROPERTY_CREATED
-          description: Response code
-        data:
-          type:
-          - object
-          - 'null'
+    FollowNetworks:
+      type: string
+      enum:
+      - airbnb
+      - amazon
+      - bandcamp
+      - behance
+      - bitbucket
+      - blogger
+      - bluesky
+      - deviantart
+      - digg
+      - discord
+      - dribbble
+      - etsy
+      - facebook
+      - flickr
+      - flipboard
+      - foursquare
+      - gettr
+      - github
+      - gitlab
+      - goodreads
+      - googlemaps
+      - googlescholar
+      - houzz
+      - instagram
+      - linkedin
+      - mastodon
+      - medium
+      - meetup
+      - messenger
+      - mix
+      - odnoklassniki
+      - parler
+      - patreon
+      - pinterest
+      - quora
+      - reddit
+      - shares
+      - slideshare
+      - snapchat
+      - soundcloud
+      - spotify
+      - stackoverflow
+      - strava
+      - telegram
+      - threads
+      - tiktok
+      - trello
+      - tripadvisor
+      - truthsocial
+      - tumblr
+      - twitch
+      - twitter
+      - vimeo
+      - vk
+      - wechat
+      - weibo
+      - whatsapp
+      - xing
+      - yelp
+      - youtube
+      - zillow
+      - zomato
     StickyShareButtonsConfig:
       type: object
       properties:
@@ -397,71 +388,76 @@ components:
         preview:
           type: boolean
           default: false
-    FollowNetworks:
+    Reactions:
       type: string
       enum:
-      - airbnb
-      - amazon
-      - bandcamp
-      - behance
-      - bitbucket
-      - blogger
-      - bluesky
-      - deviantart
-      - digg
-      - discord
-      - dribbble
-      - etsy
-      - facebook
-      - flickr
-      - flipboard
-      - foursquare
-      - gettr
-      - github
-      - gitlab
-      - goodreads
-      - googlemaps
-      - googlescholar
-      - houzz
-      - instagram
-      - linkedin
-      - mastodon
-      - medium
-      - meetup
-      - messenger
-      - mix
-      - odnoklassniki
-      - parler
-      - patreon
-      - pinterest
-      - quora
-      - reddit
-      - shares
-      - slideshare
-      - snapchat
-      - soundcloud
-      - spotify
-      - stackoverflow
-      - strava
-      - telegram
-      - threads
-      - tiktok
-      - trello
-      - tripadvisor
-      - truthsocial
-      - tumblr
-      - twitch
-      - twitter
-      - vimeo
-      - vk
-      - wechat
-      - weibo
-      - whatsapp
-      - xing
-      - yelp
-      - youtube
-      - zillow
-      - zomato
+      - slight_smile
+      - heart_eyes
+      - laughing
+      - astonished
+      - sob
+      - rage
+    InlineShareButtonConfig:
+      type: object
+      properties:
+        app_id:
+          type: string
+          enum:
+          - inline-share-buttons
+        enabled:
+          type: boolean
+          default: true
+        alignment:
+          type: string
+          default: left
+        background_color:
+          type: string
+          default: '#B581A3'
+        color:
+          type: string
+          default: social
+        fade_in:
+          type: boolean
+          default: true
+        font_size:
+          type: number
+          default: 12
+        text_color:
+          type: string
+          default: '#fff'
+        language:
+          type: string
+          default: en
+        min_count:
+          type: number
+          default: 0
+        networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShareNetworks'
+        padding:
+          type: number
+          default: 10
+        radius:
+          type: number
+          default: 0
+        show_mobile_buttons:
+          type: boolean
+          default: true
+        size:
+          type: number
+          default: 40
+        spacing:
+          type: number
+          default: 8
+        subject:
+          type: string
+        use_native_counts:
+          type: boolean
+          default: true
+        preview:
+          type: boolean
+          default: false
     InlineReactionButtonsConfig:
       type: object
       properties:
@@ -493,6 +489,72 @@ components:
           default: 48
         url:
           type: string
+    InlineFollowButtonsConfig:
+      type: object
+      properties:
+        app_id:
+          type: string
+          enum:
+          - inline-follow-buttons
+        enabled:
+          type: boolean
+          default: true
+        action:
+          type: string
+          default: 'Follow us:'
+        action_enable:
+          type: boolean
+          default: true
+        action_pos:
+          type: string
+          default: top
+        alignment:
+          type: string
+          default: left
+        color:
+          type: string
+          default: social
+        fade_in:
+          type: boolean
+          default: true
+        language:
+          type: string
+          default: en
+        networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/FollowNetworks'
+        padding:
+          type: number
+          default: 10
+        profiles:
+          type: object
+          default: {}
+        radius:
+          type: number
+          default: 0
+        size:
+          type: number
+          default: 40
+        spacing:
+          type: number
+          default: 8
+        preview:
+          type: boolean
+          default: false
+    Response:
+      type: object
+      required:
+      - code
+      properties:
+        code:
+          type: string
+          example: PROPERTY_CREATED
+          description: Response code
+        data:
+          type:
+          - object
+          - 'null'
     ShareNetworks:
       type: string
       enum:
@@ -561,68 +623,6 @@ components:
       - xing
       - yahoomail
       - yummly
-    InlineFollowButtonsConfig:
-      type: object
-      properties:
-        app_id:
-          type: string
-          enum:
-          - inline-follow-buttons
-        enabled:
-          type: boolean
-          default: true
-        action:
-          type: string
-          default: 'Follow us:'
-        action_enable:
-          type: boolean
-          default: true
-        action_pos:
-          type: string
-          default: top
-        alignment:
-          type: string
-          default: left
-        color:
-          type: string
-          default: social
-        fade_in:
-          type: boolean
-          default: true
-        language:
-          type: string
-          default: en
-        networks:
-          type: array
-          items:
-            $ref: '#/components/schemas/FollowNetworks'
-        padding:
-          type: number
-          default: 10
-        profiles:
-          type: object
-          default: {}
-        radius:
-          type: number
-          default: 0
-        size:
-          type: number
-          default: 40
-        spacing:
-          type: number
-          default: 8
-        preview:
-          type: boolean
-          default: false
-    Reactions:
-      type: string
-      enum:
-      - slight_smile
-      - heart_eyes
-      - laughing
-      - astonished
-      - sob
-      - rage
   securitySchemes:
     BearerToken:
       type: http
