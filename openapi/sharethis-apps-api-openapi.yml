@@ -241,6 +241,90 @@ paths:
           description: Internal server error
 components:
   schemas:
+    InlineFollowButtonsConfig:
+      type: object
+      properties:
+        app_id:
+          type: string
+          enum:
+          - inline-follow-buttons
+        enabled:
+          type: boolean
+          default: true
+        action:
+          type: string
+          default: 'Follow us:'
+        action_enable:
+          type: boolean
+          default: true
+        action_pos:
+          type: string
+          default: top
+        alignment:
+          type: string
+          default: left
+        color:
+          type: string
+          default: social
+        fade_in:
+          type: boolean
+          default: true
+        language:
+          type: string
+          default: en
+        networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/FollowNetworks'
+        padding:
+          type: number
+          default: 10
+        profiles:
+          type: object
+          default: {}
+        radius:
+          type: number
+          default: 0
+        size:
+          type: number
+          default: 40
+        spacing:
+          type: number
+          default: 8
+        preview:
+          type: boolean
+          default: false
+    InlineReactionButtonsConfig:
+      type: object
+      properties:
+        app_id:
+          type: string
+          enum:
+          - inline-reaction-buttons
+        enabled:
+          type: boolean
+          default: true
+        fade_in:
+          type: boolean
+          default: true
+        min_count:
+          type: number
+          default: 0
+        reactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reactions'
+        padding:
+          type: number
+          default: 10
+        language:
+          type: string
+          default: en
+        size:
+          type: number
+          default: 48
+        url:
+          type: string
     FollowNetworks:
       type: string
       enum:
@@ -306,6 +390,87 @@ components:
       - youtube
       - zillow
       - zomato
+    ShareNetworks:
+      type: string
+      enum:
+      - facebook
+      - blogger
+      - bluesky
+      - buffer
+      - chatgpt
+      - claude
+      - copilot
+      - copy
+      - diaspora
+      - digg
+      - diigo
+      - douban
+      - email
+      - evernote
+      - fark
+      - flipboard
+      - gab
+      - gemini
+      - getpocket
+      - gmail
+      - googlebookmarks
+      - grok
+      - hackernews
+      - houzz
+      - instapaper
+      - kakao
+      - kindleit
+      - line
+      - linkedin
+      - livejournal
+      - mastodon
+      - mailru
+      - meneame
+      - messenger
+      - microsoftteams
+      - naver
+      - nextdoor
+      - odnoklassniki
+      - outlook
+      - perplexity
+      - pinboard
+      - pinterest
+      - plurk
+      - print
+      - qzone
+      - reddit
+      - refind
+      - renren
+      - sharethis
+      - sms
+      - telegram
+      - tencentqq
+      - threema
+      - trello
+      - tumblr
+      - twitter
+      - vk
+      - viber
+      - wechat
+      - weibo
+      - whatsapp
+      - wordpress
+      - xing
+      - yahoomail
+      - yummly
+    Response:
+      type: object
+      required:
+      - code
+      properties:
+        code:
+          type: string
+          example: PROPERTY_CREATED
+          description: Response code
+        data:
+          type:
+          - object
+          - 'null'
     StickyShareButtonsConfig:
       type: object
       properties:
@@ -388,15 +553,6 @@ components:
         preview:
           type: boolean
           default: false
-    Reactions:
-      type: string
-      enum:
-      - slight_smile
-      - heart_eyes
-      - laughing
-      - astonished
-      - sob
-      - rage
     InlineShareButtonConfig:
       type: object
       properties:
@@ -458,171 +614,15 @@ components:
         preview:
           type: boolean
           default: false
-    InlineReactionButtonsConfig:
-      type: object
-      properties:
-        app_id:
-          type: string
-          enum:
-          - inline-reaction-buttons
-        enabled:
-          type: boolean
-          default: true
-        fade_in:
-          type: boolean
-          default: true
-        min_count:
-          type: number
-          default: 0
-        reactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Reactions'
-        padding:
-          type: number
-          default: 10
-        language:
-          type: string
-          default: en
-        size:
-          type: number
-          default: 48
-        url:
-          type: string
-    InlineFollowButtonsConfig:
-      type: object
-      properties:
-        app_id:
-          type: string
-          enum:
-          - inline-follow-buttons
-        enabled:
-          type: boolean
-          default: true
-        action:
-          type: string
-          default: 'Follow us:'
-        action_enable:
-          type: boolean
-          default: true
-        action_pos:
-          type: string
-          default: top
-        alignment:
-          type: string
-          default: left
-        color:
-          type: string
-          default: social
-        fade_in:
-          type: boolean
-          default: true
-        language:
-          type: string
-          default: en
-        networks:
-          type: array
-          items:
-            $ref: '#/components/schemas/FollowNetworks'
-        padding:
-          type: number
-          default: 10
-        profiles:
-          type: object
-          default: {}
-        radius:
-          type: number
-          default: 0
-        size:
-          type: number
-          default: 40
-        spacing:
-          type: number
-          default: 8
-        preview:
-          type: boolean
-          default: false
-    Response:
-      type: object
-      required:
-      - code
-      properties:
-        code:
-          type: string
-          example: PROPERTY_CREATED
-          description: Response code
-        data:
-          type:
-          - object
-          - 'null'
-    ShareNetworks:
+    Reactions:
       type: string
       enum:
-      - facebook
-      - blogger
-      - bluesky
-      - buffer
-      - chatgpt
-      - claude
-      - copilot
-      - copy
-      - diaspora
-      - digg
-      - diigo
-      - douban
-      - email
-      - evernote
-      - fark
-      - flipboard
-      - gab
-      - gemini
-      - getpocket
-      - gmail
-      - googlebookmarks
-      - grok
-      - hackernews
-      - houzz
-      - instapaper
-      - kakao
-      - kindleit
-      - line
-      - linkedin
-      - livejournal
-      - mastodon
-      - mailru
-      - meneame
-      - messenger
-      - microsoftteams
-      - naver
-      - nextdoor
-      - odnoklassniki
-      - outlook
-      - perplexity
-      - pinboard
-      - pinterest
-      - plurk
-      - print
-      - qzone
-      - reddit
-      - refind
-      - renren
-      - sharethis
-      - sms
-      - telegram
-      - tencentqq
-      - threema
-      - trello
-      - tumblr
-      - twitter
-      - vk
-      - viber
-      - wechat
-      - weibo
-      - whatsapp
-      - wordpress
-      - xing
-      - yahoomail
-      - yummly
+      - slight_smile
+      - heart_eyes
+      - laughing
+      - astonished
+      - sob
+      - rage
   securitySchemes:
     BearerToken:
       type: http
