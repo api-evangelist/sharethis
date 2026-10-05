@@ -1,0 +1,12 @@
+{
+ "url": "https://platform-api.sharethis.com/v2.0/openapi.json",
+ "requested_url": "https://platform-api.sharethis.com/v2.0/openapi.json",
+ "status": 200,
+ "content_type": "application/json; charset=utf-8",
+ "bytes": 24416,
+ "sha256": "e1aeb254b14fe3977b40dcc6a25f4749989b17702932e5af78f2b5bb82a1706f",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
