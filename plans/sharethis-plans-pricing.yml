@@ -46,3 +46,16 @@ enterprise_track:
     LiveRamp and The Trade Desk and via the sibling Predactiv Data Platform. That side publishes no
     pricing at all and is contact-sales only. The free website tools are the data-collection surface
     that feeds it.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
