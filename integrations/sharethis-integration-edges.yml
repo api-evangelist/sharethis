@@ -3,6 +3,7 @@ method: searched
 checked:
 - https://docs.mparticle.com/integrations/sharethis/audience/
 - https://vendor-list.consensu.org/v3/vendor-list.json
+- wordpress/integrations/wordpress-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: mParticle
@@ -59,4 +60,21 @@ edges:
     detected: '2026-10-14'
   detected_by: sweep-adtech.py
   detected: '2026-10-14'
+- partner_name: WordPress (own)
+  partner: wordpress
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://wordpress.org/plugins/sharethis-share-buttons/
+  mirror_of: wordpress/integrations/wordpress-integration-edges.yml
+  apps:
+  - ShareThis Share Buttons
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+  category: WordPress plugin
 source: https://docs.mparticle.com/integrations/sharethis/audience/
