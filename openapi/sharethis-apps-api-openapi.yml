@@ -241,6 +241,67 @@ paths:
           description: Internal server error
 components:
   schemas:
+    InlineShareButtonConfig:
+      type: object
+      properties:
+        app_id:
+          type: string
+          enum:
+          - inline-share-buttons
+        enabled:
+          type: boolean
+          default: true
+        alignment:
+          type: string
+          default: left
+        background_color:
+          type: string
+          default: '#B581A3'
+        color:
+          type: string
+          default: social
+        fade_in:
+          type: boolean
+          default: true
+        font_size:
+          type: number
+          default: 12
+        text_color:
+          type: string
+          default: '#fff'
+        language:
+          type: string
+          default: en
+        min_count:
+          type: number
+          default: 0
+        networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShareNetworks'
+        padding:
+          type: number
+          default: 10
+        radius:
+          type: number
+          default: 0
+        show_mobile_buttons:
+          type: boolean
+          default: true
+        size:
+          type: number
+          default: 40
+        spacing:
+          type: number
+          default: 8
+        subject:
+          type: string
+        use_native_counts:
+          type: boolean
+          default: true
+        preview:
+          type: boolean
+          default: false
     InlineFollowButtonsConfig:
       type: object
       properties:
@@ -294,37 +355,15 @@ components:
         preview:
           type: boolean
           default: false
-    InlineReactionButtonsConfig:
-      type: object
-      properties:
-        app_id:
-          type: string
-          enum:
-          - inline-reaction-buttons
-        enabled:
-          type: boolean
-          default: true
-        fade_in:
-          type: boolean
-          default: true
-        min_count:
-          type: number
-          default: 0
-        reactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Reactions'
-        padding:
-          type: number
-          default: 10
-        language:
-          type: string
-          default: en
-        size:
-          type: number
-          default: 48
-        url:
-          type: string
+    Reactions:
+      type: string
+      enum:
+      - slight_smile
+      - heart_eyes
+      - laughing
+      - astonished
+      - sob
+      - rage
     FollowNetworks:
       type: string
       enum:
@@ -390,74 +429,6 @@ components:
       - youtube
       - zillow
       - zomato
-    ShareNetworks:
-      type: string
-      enum:
-      - facebook
-      - blogger
-      - bluesky
-      - buffer
-      - chatgpt
-      - claude
-      - copilot
-      - copy
-      - diaspora
-      - digg
-      - diigo
-      - douban
-      - email
-      - evernote
-      - fark
-      - flipboard
-      - gab
-      - gemini
-      - getpocket
-      - gmail
-      - googlebookmarks
-      - grok
-      - hackernews
-      - houzz
-      - instapaper
-      - kakao
-      - kindleit
-      - line
-      - linkedin
-      - livejournal
-      - mastodon
-      - mailru
-      - meneame
-      - messenger
-      - microsoftteams
-      - naver
-      - nextdoor
-      - odnoklassniki
-      - outlook
-      - perplexity
-      - pinboard
-      - pinterest
-      - plurk
-      - print
-      - qzone
-      - reddit
-      - refind
-      - renren
-      - sharethis
-      - sms
-      - telegram
-      - tencentqq
-      - threema
-      - trello
-      - tumblr
-      - twitter
-      - vk
-      - viber
-      - wechat
-      - weibo
-      - whatsapp
-      - wordpress
-      - xing
-      - yahoomail
-      - yummly
     Response:
       type: object
       required:
@@ -553,76 +524,105 @@ components:
         preview:
           type: boolean
           default: false
-    InlineShareButtonConfig:
+    ShareNetworks:
+      type: string
+      enum:
+      - facebook
+      - blogger
+      - bluesky
+      - buffer
+      - chatgpt
+      - claude
+      - copilot
+      - copy
+      - diaspora
+      - digg
+      - diigo
+      - douban
+      - email
+      - evernote
+      - fark
+      - flipboard
+      - gab
+      - gemini
+      - getpocket
+      - gmail
+      - googlebookmarks
+      - grok
+      - hackernews
+      - houzz
+      - instapaper
+      - kakao
+      - kindleit
+      - line
+      - linkedin
+      - livejournal
+      - mastodon
+      - mailru
+      - meneame
+      - messenger
+      - microsoftteams
+      - naver
+      - nextdoor
+      - odnoklassniki
+      - outlook
+      - perplexity
+      - pinboard
+      - pinterest
+      - plurk
+      - print
+      - qzone
+      - reddit
+      - refind
+      - renren
+      - sharethis
+      - sms
+      - telegram
+      - tencentqq
+      - threema
+      - trello
+      - tumblr
+      - twitter
+      - vk
+      - viber
+      - wechat
+      - weibo
+      - whatsapp
+      - wordpress
+      - xing
+      - yahoomail
+      - yummly
+    InlineReactionButtonsConfig:
       type: object
       properties:
         app_id:
           type: string
           enum:
-          - inline-share-buttons
+          - inline-reaction-buttons
         enabled:
           type: boolean
           default: true
-        alignment:
-          type: string
-          default: left
-        background_color:
-          type: string
-          default: '#B581A3'
-        color:
-          type: string
-          default: social
         fade_in:
           type: boolean
           default: true
-        font_size:
-          type: number
-          default: 12
-        text_color:
-          type: string
-          default: '#fff'
-        language:
-          type: string
-          default: en
         min_count:
           type: number
           default: 0
-        networks:
+        reactions:
           type: array
           items:
-            $ref: '#/components/schemas/ShareNetworks'
+            $ref: '#/components/schemas/Reactions'
         padding:
           type: number
           default: 10
-        radius:
-          type: number
-          default: 0
-        show_mobile_buttons:
-          type: boolean
-          default: true
+        language:
+          type: string
+          default: en
         size:
           type: number
-          default: 40
-        spacing:
-          type: number
-          default: 8
-        subject:
+          default: 48
+        url:
           type: string
-        use_native_counts:
-          type: boolean
-          default: true
-        preview:
-          type: boolean
-          default: false
-    Reactions:
-      type: string
-      enum:
-      - slight_smile
-      - heart_eyes
-      - laughing
-      - astonished
-      - sob
-      - rage
   securitySchemes:
     BearerToken:
       type: http
