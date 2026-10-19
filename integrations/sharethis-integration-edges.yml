@@ -1,7 +1,14 @@
 generated: '2026-10-14'
 method: searched
 checked:
+- https://api.nuget.org/v3
+- https://crates.io/api/v1
 - https://docs.mparticle.com/integrations/sharethis/audience/
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
 - https://vendor-list.consensu.org/v3/vendor-list.json
 - wordpress/integrations/wordpress-integration-edges.yml
 marketplace_apps: []
@@ -77,4 +84,34 @@ edges:
   detected: '2026-10-15'
   detected_by: mirror-platform-listings.py
   category: WordPress plugin
+- partner_name: npm registry
+  partner: npm
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (JavaScript/TypeScript)
+  evidence: https://www.npmjs.com/package/sharethis-reactjs
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: sharethis-reactjs
+      version: 1.6.0
+      released: '2022-05-17'
+      released_field: modified
+      lapsed: true
+      page: https://www.npmjs.com/package/sharethis-reactjs
+      repo_leg: github-org:sharethis-github
+      publisher_leg: email:sharethis.com
+      matched_by: domain
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-18'
 source: https://docs.mparticle.com/integrations/sharethis/audience/
