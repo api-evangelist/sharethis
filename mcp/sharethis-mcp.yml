@@ -2,30 +2,27 @@ generated: '2026-08-27'
 method: probed
 source: https://mcp.sharethis.com/ (landing page + live JSON-RPC tools/list, 2026-08-27)
 name: ShareThis MCP
-description: >-
-  First-party remote Model Context Protocol server that exposes ShareThis property and app
-  management to AI assistants. Documented on ShareThis's own site at https://sharethis.com/mcp/
-  and served from mcp.sharethis.com with a human-readable landing page on GET / and the JSON-RPC
-  endpoint on POST / (the host root — NOT /mcp, which returns 404).
+description: First-party remote Model Context Protocol server that exposes ShareThis property and app
+  management to AI assistants. Documented on ShareThis's own site at https://sharethis.com/mcp/ and served
+  from mcp.sharethis.com with a human-readable landing page on GET / and the JSON-RPC endpoint on POST
+  / (the host root — NOT /mcp, which returns 404).
 deployment:
   mode: remote
   endpoint: https://mcp.sharethis.com
   auth: oauth
   verified: probed
-  note: >-
-    Remote-only. ShareThis ships no stdio/npx package for this server — there is no ShareThis MCP
-    package on npm or PyPI and the provider's own connection guides for ChatGPT, Claude, Cursor and
-    Manus all instruct the user to add https://mcp.sharethis.com as a REMOTE server URL and complete
-    an OAuth login. An agent can reach this surface without anyone installing anything.
+  note: Remote-only. ShareThis ships no stdio/npx package for this server — there is no ShareThis MCP
+    package on npm or PyPI and the provider's own connection guides for ChatGPT, Claude, Cursor and Manus
+    all instruct the user to add https://mcp.sharethis.com as a REMOTE server URL and complete an OAuth
+    login. An agent can reach this surface without anyone installing anything.
 transport:
   protocol: JSON-RPC 2.0
   endpoint: POST /
   docs_page: GET /
-  discovery: >-
-    tools/list responds ANONYMOUSLY with the complete tool set including full inputSchema and
-    outputSchema for every tool. Tool INVOCATION requires an OAuth bearer token; discovery does not.
-    This is unusually open — most catalogued MCP servers return an OAuth challenge on tools/list and
-    leave their schemas unreadable without credentials.
+  discovery: tools/list responds ANONYMOUSLY with the complete tool set including full inputSchema and
+    outputSchema for every tool. Tool INVOCATION requires an OAuth bearer token; discovery does not. This
+    is unusually open — most catalogued MCP servers return an OAuth challenge on tools/list and leave
+    their schemas unreadable without credentials.
 authentication:
   type: oauth2
   flows:
@@ -41,9 +38,8 @@ authentication:
   - well-known/sharethis-mcp-oauth-protected-resource.json
   - well-known/sharethis-mcp-oauth-authorization-server.json
   - well-known/sharethis-mcp-openid-configuration.json
-  account_prerequisite: >-
-    A ShareThis account created at https://platform.sharethis.com is required before OAuth linking
-    will succeed.
+  account_prerequisite: A ShareThis account created at https://platform.sharethis.com is required before
+    OAuth linking will succeed.
 clients_documented:
 - ChatGPT
 - Claude
@@ -95,16 +91,14 @@ tools:
   destructive: true
 - name: sharethis_apps_liveview
   title: App Live View
-  description: >-
-    Show the live saved view of a ShareThis app using the property sharethis.js runtime.
+  description: Show the live saved view of a ShareThis app using the property sharethis.js runtime.
   read_only: true
   destructive: false
 annotations_published: true
-annotations_note: >-
-  Every tool carries MCP annotations (readOnlyHint, destructiveHint, openWorldHint). Exactly one
-  tool — sharethis_apps_delete — is flagged destructiveHint:true, which is the signal an agent
-  needs to gate that call behind confirmation. Publishing honest per-tool annotations is rare in
-  the catalogue and is a genuine agent-safety strength here.
+annotations_note: Every tool carries MCP annotations (readOnlyHint, destructiveHint, openWorldHint). Exactly
+  one tool — sharethis_apps_delete — is flagged destructiveHint:true, which is the signal an agent needs
+  to gate that call behind confirmation. Publishing honest per-tool annotations is rare in the catalogue
+  and is a genuine agent-safety strength here.
 related_servers:
 - name: Predactiv MCP
   endpoint: https://mcp.predactiv.com
@@ -113,14 +107,36 @@ related_servers:
   authorization_servers:
   - https://platform-api.predactiv.com/v2/oauth
   samples_repo: https://github.com/sharethis-github/predactiv-mcp-python-samples
-  ownership_note: >-
-    Different domain, same company. ShareThis rebranded as Predactiv in 2024 and now trades as
-    "ShareThis, a Predactiv Company"; the Predactiv MCP sample repository is published inside
-    ShareThis's OWN GitHub organization (sharethis-github) with homepage predactiv.com, which is
-    the provider's own evidence that the two surfaces belong to one company.
-  note: >-
-    Recorded as a lead only. Anonymous tools/list returns 401 AUTH_REQUIRED, so the tool set and
-    input schemas could NOT be read and nothing about them is asserted here. This is the Predactiv
-    Data Platform (audiences, datasets, ML models, destinations), a different product from the
-    ShareThis website-tools MCP above; it is not counted in tool_count and is not wired as a
-    ShareThis API entry.
+  ownership_note: Different domain, same company. ShareThis rebranded as Predactiv in 2024 and now trades
+    as "ShareThis, a Predactiv Company"; the Predactiv MCP sample repository is published inside ShareThis's
+    OWN GitHub organization (sharethis-github) with homepage predactiv.com, which is the provider's own
+    evidence that the two surfaces belong to one company.
+  note: Recorded as a lead only. Anonymous tools/list returns 401 AUTH_REQUIRED, so the tool set and input
+    schemas could NOT be read and nothing about them is asserted here. This is the Predactiv Data Platform
+    (audiences, datasets, ML models, destinations), a different product from the ShareThis website-tools
+    MCP above; it is not counted in tool_count and is not wired as a ShareThis API entry.
+tool_quality:
+  tool_count: 9
+  tokens_total: 1507
+  tokens_per_tool_median: 149
+  heavy_tools: []
+  heavy_tool_count: 0
+  params_total: 13
+  params_undescribed: 12
+  params_described_pct: 7.7
+  tools_with_undescribed_params: 8
+  tools_annotated: 9
+  annotated_pct: 100.0
+  state_changing_unhinted: []
+  tools_missing_schema: 0
+  short_descriptions: 0
+  duplicate_descriptions: 0
+  duplicate_names: 0
+  nonportable_names: []
+  output_schema_count: 9
+  token_estimate: chars/3.6 of each compact tool definition
+  source: mcp/sharethis-mcp-tools.json
+  measured: '2026-10-20'
+  scored: false
+  note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
+    from Glimind's agent-readiness audit.
