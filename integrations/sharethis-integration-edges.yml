@@ -11,33 +11,10 @@ checked:
 - https://rubygems.org/api/v1
 - https://vendor-list.consensu.org/v3/vendor-list.json
 - wordpress/integrations/wordpress-integration-edges.yml
+- https://app.snowflake.com/marketplace/providers
+- https://aws.amazon.com/marketplace/search/results?FULFILLMENT_OPTION_TYPE=DATA_EXCHANGE
 marketplace_apps: []
 edges:
-- partner_name: mParticle
-  partner: mparticle
-  partner_match: aggregator
-  marketplace: coverage
-  channel: partner-built
-  direction: partner-built
-  type: coverage
-  relationship: connector-coverage
-  evidence: https://docs.mparticle.com/integrations/sharethis/audience/
-  coverage_role:
-  - destination
-  - source
-  cdp_signals:
-    destination:
-      catalog_entries:
-      - sharethis
-      integration_types:
-      - audience
-    source:
-      catalog_entries:
-      - sharethis
-      integration_types:
-      - feed
-  detected_by: sweep-cdp.py
-  first_seen: '2026-10-14'
 - partner_name: IAB Europe TCF Global Vendor List
   partner: null
   partner_match: domain
@@ -114,4 +91,89 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-official-sdks.py
   first_seen: '2026-10-18'
+- partner_name: mParticle
+  partner: mparticle
+  partner_match: aggregator
+  marketplace: coverage
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: connector-coverage
+  evidence: https://docs.mparticle.com/integrations/sharethis/audience/
+  coverage_role:
+  - destination
+  - source
+  cdp_signals:
+    destination:
+      catalog_entries:
+      - sharethis
+      integration_types:
+      - audience
+    source:
+      catalog_entries:
+      - sharethis
+      integration_types:
+      - feed
+  detected_by: sweep-cdp.py
+  first_seen: '2026-10-14'
+- partner_name: AWS Data Exchange
+  partner: amazon-data-exchange
+  partner_match: aggregator
+  type: marketplace
+  marketplace: amazon-data-exchange-marketplace
+  channel: distribution
+  relationship: distribution-channel
+  direction: third-party
+  evidence: https://aws.amazon.com/marketplace/seller-profile?id=5ee6f5af-2453-41a2-ac06-add1d6988454
+  category: data product listing
+  contract_reference:
+    register: AWS Data Exchange (AWS Marketplace discovery search, FULFILLMENT_OPTION_TYPE=DATA_EXCHANGE + seller-profile
+      sellerWebsiteUrl)
+    spec_file: null
+    role: data-marketplace-seller
+    registered_name: ShareThis Inc
+    matched_domain: sharethis.com
+    matched_by: domain
+    listings: 23
+    sample_listings:
+    - Auto Trends & Consumer Behavior Data by ShareThis
+    - Beauty Shoppers Currently Engaging With Cosmetics Product Line
+    - Breakfast Eaters With High-Interest in Cereal Products
+    - COVID-19 Online Behavioral Trends (Free)
+    - Care Takers Highly Engaged With Baby Products Online
+    signal_note: 'participation: the provider lists data products on this marketplace; counts are context'
+    detected_by: sweep-data-marketplaces.py
+    detected: '2026-10-20'
+  detected_by: sweep-data-marketplaces.py
+  detected: '2026-10-20'
+  publisher_verified:
+  - Deployed on AWS
+  - Standard Data Agreement
+- partner_name: Snowflake Marketplace
+  partner: snowflake
+  partner_match: aggregator
+  type: marketplace
+  marketplace: snowflake-marketplace
+  channel: distribution
+  relationship: distribution-channel
+  direction: third-party
+  evidence: https://app.snowflake.com/marketplace/providers/GZT0ZRRV7TT
+  category: data product listing
+  contract_reference:
+    register: Snowflake Marketplace providers (app.snowflake.com/marketplace/providers, rendered; names only, Wikidata
+      P856 identity step)
+    spec_file: null
+    role: data-marketplace-seller
+    registered_name: ShareThis
+    matched_domain: sharethis.com
+    matched_by: domain
+    listings: 3
+    sample_listings: []
+    signal_note: 'participation: the provider lists data products on this marketplace; counts are context'
+    detected_by: sweep-data-marketplaces.py
+    detected: '2026-10-20'
+    identity_source: wikidata
+    identity_note: wikidata P856 sharethis.com for 'ShareThis' (labelled identity step)
+  detected_by: sweep-data-marketplaces.py
+  detected: '2026-10-20'
 source: https://docs.mparticle.com/integrations/sharethis/audience/
