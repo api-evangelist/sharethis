@@ -50,48 +50,48 @@ tools_file: mcp/sharethis-mcp-tools.json
 status: live
 tools:
 - name: sharethis_properties_create
-  title: Create Property
   description: Create a property for the authenticated user.
+  title: Create Property
   read_only: false
   destructive: false
 - name: sharethis_properties_list
-  title: List Properties
   description: List properties for the authenticated user.
+  title: List Properties
   read_only: true
   destructive: false
 - name: sharethis_properties_get
-  title: Get Property
   description: Get a property by ID.
+  title: Get Property
   read_only: true
   destructive: false
 - name: sharethis_properties_validate
-  title: Validate Property
   description: Validate property ownership via domain file.
+  title: Validate Property
   read_only: false
   destructive: false
 - name: sharethis_apps_upsert
-  title: Upsert App
   description: Create or update an app config for a property.
+  title: Upsert App
   read_only: false
   destructive: false
 - name: sharethis_apps_list
-  title: List Apps
   description: List apps configured for a property.
+  title: List Apps
   read_only: true
   destructive: false
 - name: sharethis_apps_get
-  title: Get App
   description: Get configuration for a specific app on a property.
+  title: Get App
   read_only: true
   destructive: false
 - name: sharethis_apps_delete
-  title: Delete App
   description: Remove an app from a property.
+  title: Delete App
   read_only: false
   destructive: true
 - name: sharethis_apps_liveview
-  title: App Live View
   description: Show the live saved view of a ShareThis app using the property sharethis.js runtime.
+  title: App Live View
   read_only: true
   destructive: false
 annotations_published: true
@@ -140,3 +140,4 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools_count: 9
