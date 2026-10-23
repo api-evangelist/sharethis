@@ -13,6 +13,9 @@ checked:
 - wordpress/integrations/wordpress-integration-edges.yml
 - https://app.snowflake.com/marketplace/providers
 - https://aws.amazon.com/marketplace/search/results?FULFILLMENT_OPTION_TYPE=DATA_EXCHANGE
+- https://hex.pm/api
+- https://packagist.org/packages
+- https://pub.dev/api
 marketplace_apps: []
 edges:
 - partner_name: IAB Europe TCF Global Vendor List
@@ -176,4 +179,34 @@ edges:
     identity_note: wikidata P856 sharethis.com for 'ShareThis' (labelled identity step)
   detected_by: sweep-data-marketplaces.py
   detected: '2026-10-20'
+- partner_name: Packagist
+  partner: packagist
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (PHP)
+  evidence: https://packagist.org/packages/sharethis/magento-sharethis-sharebuttons
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Packagist (public registry JSON)
+    spec_file: null
+    language: PHP
+    packages:
+    - name: sharethis/magento-sharethis-sharebuttons
+      version: 1.1.0
+      released: '2023-09-18'
+      released_field: time
+      lapsed: true
+      page: https://packagist.org/packages/sharethis/magento-sharethis-sharebuttons
+      repo_leg: github-org:sharethis-github
+      publisher_leg: email:sharethis.com
+      matched_by: domain
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-php-dart-elixir-package-registries.py
+    detected: '2026-10-22'
+  detected_by: sweep-php-dart-elixir-package-registries.py
+  first_seen: '2026-10-22'
 source: https://docs.mparticle.com/integrations/sharethis/audience/
